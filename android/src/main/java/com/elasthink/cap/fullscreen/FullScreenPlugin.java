@@ -1,10 +1,29 @@
 package com.elasthink.cap.fullscreen;
 
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.os.Build;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.webkit.WebView;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+
 import com.getcapacitor.JSObject;
+import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.WebViewListener;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.util.WebColor;
+
+import java.util.ArrayList;
 
 @CapacitorPlugin(name = "FullScreen")
 public class FullScreenPlugin extends Plugin {
@@ -90,7 +109,7 @@ public class FullScreenPlugin extends Plugin {
             public void onPageLoaded(WebView webView) {
                 Logger.debug(TAG, "onPageLoaded()");
                 super.onPageLoaded(webView);
-                if (DisplayCutoutsPlugin.this.insets != null) {
+                if (FullScreenPlugin.this.insets != null) {
                     updateInsets();
                 }
             }
