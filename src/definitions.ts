@@ -25,4 +25,11 @@ export interface FullScreenPlugin {
   setNavigationBarStyle(options: StyleOptions): Promise<void>
 }
 
-
+export interface InsetsEvent extends Event {
+  detail: {
+    left : number,
+    top : number,
+    right : number,
+    bottom : number
+  }
+}
