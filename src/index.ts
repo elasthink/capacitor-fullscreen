@@ -16,9 +16,14 @@ interface InsetsEvent extends Event {
 
 // Default
 document.documentElement.style.setProperty('--safe-area-inset-left', 'env(safe-area-inset-left)');
-document.documentElement.style.setProperty('--safe-area-inset-top', 'env(safe-area-inset-top');
-document.documentElement.style.setProperty('--safe-area-inset-right', 'env(safe-area-inset-right');
+document.documentElement.style.setProperty('--safe-area-inset-top', 'env(safe-area-inset-top)');
+document.documentElement.style.setProperty('--safe-area-inset-right', 'env(safe-area-inset-right)');
 document.documentElement.style.setProperty('--safe-area-inset-bottom', 'env(safe-area-inset-bottom)');
+
+// TEST !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+document.documentElement.style.setProperty('--safe-area-inset-top', '36px');
+document.documentElement.style.setProperty('--safe-area-inset-bottom', '24px');
+// TEST !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 // @ts-ignore
 document.addEventListener('insetschange', (event: InsetsEvent) => {
