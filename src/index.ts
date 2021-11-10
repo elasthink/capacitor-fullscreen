@@ -11,8 +11,8 @@ document.documentElement.style.setProperty('--safe-area-inset-right', 'env(safe-
 document.documentElement.style.setProperty('--safe-area-inset-bottom', 'env(safe-area-inset-bottom)');
 
 // TEST !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-document.documentElement.style.setProperty('--safe-area-inset-top', '36px');
-document.documentElement.style.setProperty('--safe-area-inset-bottom', '24px');
+// document.documentElement.style.setProperty('--safe-area-inset-top', '36px');
+// document.documentElement.style.setProperty('--safe-area-inset-bottom', '24px');
 // TEST !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 document.addEventListener('insetschange', {
