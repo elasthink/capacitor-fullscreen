@@ -6,14 +6,16 @@ import { Type, Style } from './definitions';
 
 const FullScreen = registerPlugin<FullScreenPlugin>('FullScreen');
 
-window.addEventListener('DOMContentLoaded', async () => {
-  for (const t of [Type.SafeArea, Type.Keyboard]) {
-    const insets = await FullScreen.getInsets({ type: t });
+// window.addEventListener('DOMContentLoaded', async () => {
+console.log('Getting insets...');
+for (const t of [Type.SafeArea, Type.Keyboard]) {
+  FullScreen.getInsets({ type: t }).then(insets => {
     if (insets) {
       updateInsets(t, insets);
     }
-  }
-});
+  });
+}
+// });
 
 window.addEventListener('insetschange', {
   handleEvent(event: InsetsEvent): void {

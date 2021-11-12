@@ -97,13 +97,18 @@ public class FullScreenPlugin extends Plugin {
                 isNavigationBarHidden = !show;
 
             } else if ("keyboard".equals(type)) {
-                final Activity activity = getActivity();
-                final View decorView = activity.getWindow().getDecorView();
-                final InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+//                final Activity activity = getActivity();
+//                final View decorView = activity.getWindow().getDecorView();
+//                final InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+//                if (show) {
+//                    imm.showSoftInput(decorView, InputMethodManager.SHOW_IMPLICIT); // SHOW_FORCED?
+//                } else {
+//                    imm.hideSoftInputFromWindow(decorView.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+//                }
                 if (show) {
-                    imm.showSoftInput(decorView, InputMethodManager.SHOW_IMPLICIT); // SHOW_FORCED?
+                    controller.show(WindowInsetsCompat.Type.ime());
                 } else {
-                    imm.hideSoftInputFromWindow(decorView.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+                    controller.hide(WindowInsetsCompat.Type.ime());
                 }
             } else if ("accessory-bar".equals(type)) {
                 call.unimplemented("Not implemented on Android.");
@@ -141,11 +146,11 @@ public class FullScreenPlugin extends Plugin {
         Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout());
         if (!isStatusBarHidden) {
             // NO FUNCIONA: windowInsets.isVisible(WindowInsetsCompat.Type.statusBars())
-            insets = Insets.add(insets, windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()));
+            insets = Insets.max(insets, windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()));
         }
         if (!isNavigationBarHidden) {
             // NO FUNCIONA: windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars())
-            insets = Insets.add(insets, windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()));
+            insets = Insets.max(insets, windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()));
         }
         return insets;
     }
