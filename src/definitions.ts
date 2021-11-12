@@ -23,6 +23,8 @@ export interface FullScreenPlugin {
   toggleNavigationBar(options: ToggleOptions): Promise<void>
   setNavigationBarColor(options: ColorOptions): Promise<void>
   setNavigationBarStyle(options: StyleOptions): Promise<void>
+
+  // toggleKeyboard(options: ToggleOptions): Promise<void>
 }
 
 export interface InsetsEvent extends Event {
@@ -33,3 +35,21 @@ export interface InsetsEvent extends Event {
     bottom : number
   }
 }
+
+// export interface KeyboardShow extends Event {
+//   detail: {
+//     left : number,
+//     top : number,
+//     right : number,
+//     bottom : number
+//   }
+// }
+
+// export interface KeyboardHide extends Event {
+//   detail: {
+//     left : number,
+//     top : number,
+//     right : number,
+//     bottom : number
+//   }
+// }
