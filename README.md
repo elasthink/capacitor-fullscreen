@@ -13,12 +13,12 @@ npx cap sync
 
 <docgen-index>
 
-* [`toggleStatusBar(...)`](#togglestatusbar)
-* [`setStatusBarColor(...)`](#setstatusbarcolor)
-* [`setStatusBarStyle(...)`](#setstatusbarstyle)
-* [`toggleNavigationBar(...)`](#togglenavigationbar)
-* [`setNavigationBarColor(...)`](#setnavigationbarcolor)
-* [`setNavigationBarStyle(...)`](#setnavigationbarstyle)
+* [`toggle(...)`](#toggle)
+* [`getInsets(...)`](#getinsets)
+* [`isVisible(...)`](#isvisible)
+* [`setColor(...)`](#setcolor)
+* [`setStyle(...)`](#setstyle)
+* [`toggleScroll(...)`](#togglescroll)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
 
@@ -27,25 +27,55 @@ npx cap sync
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### toggleStatusBar(...)
+### toggle(...)
 
 ```typescript
-toggleStatusBar(options: ToggleOptions) => any
+toggle(options: InsetsOptions) => any
 ```
 
 | Param         | Type                                                    |
 | ------------- | ------------------------------------------------------- |
-| **`options`** | <code><a href="#toggleoptions">ToggleOptions</a></code> |
+| **`options`** | <code><a href="#insetsoptions">InsetsOptions</a></code> |
 
 **Returns:** <code>any</code>
 
 --------------------
 
 
-### setStatusBarColor(...)
+### getInsets(...)
 
 ```typescript
-setStatusBarColor(options: ColorOptions) => any
+getInsets(options: InsetsOptions) => any
+```
+
+| Param         | Type                                                    |
+| ------------- | ------------------------------------------------------- |
+| **`options`** | <code><a href="#insetsoptions">InsetsOptions</a></code> |
+
+**Returns:** <code>any</code>
+
+--------------------
+
+
+### isVisible(...)
+
+```typescript
+isVisible(options: InsetsOptions) => any
+```
+
+| Param         | Type                                                    |
+| ------------- | ------------------------------------------------------- |
+| **`options`** | <code><a href="#insetsoptions">InsetsOptions</a></code> |
+
+**Returns:** <code>any</code>
+
+--------------------
+
+
+### setColor(...)
+
+```typescript
+setColor(options: ColorOptions) => any
 ```
 
 | Param         | Type                                                  |
@@ -57,10 +87,10 @@ setStatusBarColor(options: ColorOptions) => any
 --------------------
 
 
-### setStatusBarStyle(...)
+### setStyle(...)
 
 ```typescript
-setStatusBarStyle(options: StyleOptions) => any
+setStyle(options: StyleOptions) => any
 ```
 
 | Param         | Type                                                  |
@@ -72,45 +102,15 @@ setStatusBarStyle(options: StyleOptions) => any
 --------------------
 
 
-### toggleNavigationBar(...)
+### toggleScroll(...)
 
 ```typescript
-toggleNavigationBar(options: ToggleOptions) => any
+toggleScroll(options: ScrollOptions) => any
 ```
 
 | Param         | Type                                                    |
 | ------------- | ------------------------------------------------------- |
-| **`options`** | <code><a href="#toggleoptions">ToggleOptions</a></code> |
-
-**Returns:** <code>any</code>
-
---------------------
-
-
-### setNavigationBarColor(...)
-
-```typescript
-setNavigationBarColor(options: ColorOptions) => any
-```
-
-| Param         | Type                                                  |
-| ------------- | ----------------------------------------------------- |
-| **`options`** | <code><a href="#coloroptions">ColorOptions</a></code> |
-
-**Returns:** <code>any</code>
-
---------------------
-
-
-### setNavigationBarStyle(...)
-
-```typescript
-setNavigationBarStyle(options: StyleOptions) => any
-```
-
-| Param         | Type                                                  |
-| ------------- | ----------------------------------------------------- |
-| **`options`** | <code><a href="#styleoptions">StyleOptions</a></code> |
+| **`options`** | <code><a href="#scrolloptions">ScrollOptions</a></code> |
 
 **Returns:** <code>any</code>
 
@@ -120,11 +120,21 @@ setNavigationBarStyle(options: StyleOptions) => any
 ### Interfaces
 
 
-#### ToggleOptions
+#### InsetsOptions
 
-| Prop       | Type                 |
-| ---------- | -------------------- |
-| **`show`** | <code>boolean</code> |
+| Prop       | Type                                  |
+| ---------- | ------------------------------------- |
+| **`type`** | <code><a href="#type">Type</a></code> |
+
+
+#### Insets
+
+| Prop         | Type                |
+| ------------ | ------------------- |
+| **`top`**    | <code>number</code> |
+| **`right`**  | <code>number</code> |
+| **`bottom`** | <code>number</code> |
+| **`left`**   | <code>number</code> |
 
 
 #### ColorOptions
@@ -141,15 +151,32 @@ setNavigationBarStyle(options: StyleOptions) => any
 | **`style`** | <code><a href="#style">Style</a></code> |
 
 
+#### ScrollOptions
+
+| Prop           | Type                 |
+| -------------- | -------------------- |
+| **`disabled`** | <code>boolean</code> |
+
+
 ### Enums
+
+
+#### Type
+
+| Members             | Value                         |
+| ------------------- | ----------------------------- |
+| **`SafeArea`**      | <code>"safe-area"</code>      |
+| **`StatusBar`**     | <code>"status-bar"</code>     |
+| **`NavigationBar`** | <code>"navigation-bar"</code> |
+| **`Keyboard`**      | <code>"keyboard"</code>       |
+| **`AccessoryBar`**  | <code>"accessory-bar"</code>  |
 
 
 #### Style
 
-| Members       | Value                  |
-| ------------- | ---------------------- |
-| **`Dark`**    | <code>'DARK'</code>    |
-| **`Light`**   | <code>'LIGHT'</code>   |
-| **`Default`** | <code>'DEFAULT'</code> |
+| Members     | Value                |
+| ----------- | -------------------- |
+| **`Dark`**  | <code>'dark'</code>  |
+| **`Light`** | <code>'light'</code> |
 
 </docgen-api>

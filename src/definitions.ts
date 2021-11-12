@@ -1,55 +1,62 @@
-export interface ToggleOptions {
-  show: boolean;
-}
-
-export interface ColorOptions {
-  color: string;
-}
-
-export interface StyleOptions {
-  style: Style;
-}
-
 export enum Style {
-  Dark = 'DARK',
-  Light = 'LIGHT',
-  Default = 'DEFAULT'
+  Dark = 'dark',
+  Light = 'light'
 }
 
-export interface FullScreenPlugin {
-  toggleStatusBar(options: ToggleOptions): Promise<void>
-  setStatusBarColor(options: ColorOptions): Promise<void>
-  setStatusBarStyle(options: StyleOptions): Promise<void>
-  toggleNavigationBar(options: ToggleOptions): Promise<void>
-  setNavigationBarColor(options: ColorOptions): Promise<void>
-  setNavigationBarStyle(options: StyleOptions): Promise<void>
+export enum Type {
+  SafeArea = "safe-area",
+  StatusBar = "status-bar",
+  NavigationBar = "navigation-bar",
+  Keyboard = "keyboard",
+  AccessoryBar = "accessory-bar"
+}
 
-  // toggleKeyboard(options: ToggleOptions): Promise<void>
+export interface Insets {
+  top : number,
+  right : number,
+  bottom : number,
+  left : number
 }
 
 export interface InsetsEvent extends Event {
   detail: {
-    left : number,
-    top : number,
-    right : number,
-    bottom : number
+    type: Type,
+    insets: Insets
   }
 }
 
-// export interface KeyboardShow extends Event {
-//   detail: {
-//     left : number,
-//     top : number,
-//     right : number,
-//     bottom : number
-//   }
-// }
+export interface InsetsOptions {
+  type: Type
+}
 
-// export interface KeyboardHide extends Event {
-//   detail: {
-//     left : number,
-//     top : number,
-//     right : number,
-//     bottom : number
-//   }
-// }
+export interface ColorOptions extends InsetsOptions {
+  color: string
+}
+
+export interface StyleOptions extends InsetsOptions {
+  style: Style
+}
+
+export interface ScrollOptions {
+  disabled: boolean
+}
+
+export interface FullScreenPlugin {
+
+  Type: any,
+
+  Style: any,
+
+  toggle(options: InsetsOptions): Promise<void>
+
+  getInsets(options: InsetsOptions): Promise<Insets>
+
+  isVisible(options: InsetsOptions): Promise<boolean>
+
+  setColor(options: ColorOptions): Promise<boolean>
+
+  setStyle(options: StyleOptions): Promise<boolean>
+
+  toggleScroll(options: ScrollOptions): Promise<void>
+
+}

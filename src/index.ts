@@ -1,33 +1,44 @@
-import { registerPlugin } from '@capacitor/core';
+import {registerPlugin} from '@capacitor/core';
 
-import type { FullScreenPlugin, InsetsEvent } from './definitions';
+import type { FullScreenPlugin, Insets, InsetsEvent } from './definitions';
+
+import { Type, Style } from './definitions';
 
 const FullScreen = registerPlugin<FullScreenPlugin>('FullScreen');
 
-// Default
-document.documentElement.style.setProperty('--safe-area-inset-left', 'env(safe-area-inset-left)');
-document.documentElement.style.setProperty('--safe-area-inset-top', 'env(safe-area-inset-top)');
-document.documentElement.style.setProperty('--safe-area-inset-right', 'env(safe-area-inset-right)');
-document.documentElement.style.setProperty('--safe-area-inset-bottom', 'env(safe-area-inset-bottom)');
-
-// TEST !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// document.documentElement.style.setProperty('--safe-area-inset-top', '36px');
-// document.documentElement.style.setProperty('--safe-area-inset-bottom', '24px');
-// TEST !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-document.addEventListener('insetschange', {
-  handleEvent(event: InsetsEvent): void {
-    console.log(`insetschange: ${JSON.stringify(event.detail)}`);
-    document.documentElement.style.setProperty('--safe-area-inset-left',
-        `max(env(safe-area-inset-left),${event.detail.left}px)`);
-    document.documentElement.style.setProperty('--safe-area-inset-top',
-        `max(env(safe-area-inset-top),${event.detail.top}px)`);
-    document.documentElement.style.setProperty('--safe-area-inset-right',
-        `max(env(safe-area-inset-right),${event.detail.right}px)`);
-    document.documentElement.style.setProperty('--safe-area-inset-bottom',
-        `max(env(safe-area-inset-bottom),${event.detail.bottom}px)`);
+window.addEventListener('DOMContentLoaded', async () => {
+  for (const t of [Type.SafeArea, Type.Keyboard]) {
+    const insets = await FullScreen.getInsets({ type: t });
+    if (insets) {
+      updateInsets(t, insets);
+    }
   }
 });
 
-export * from './definitions';
+window.addEventListener('insetschange', {
+  handleEvent(event: InsetsEvent): void {
+    console.log(`insetschange: ${JSON.stringify(event.detail)}`);
+    updateInsets(event.detail.type, event.detail.insets);
+  }
+});
+
+function updateInsets(type: Type, insets: Insets): void {
+  if (type === Type.SafeArea) {
+    updateInsetsVars('safe', insets);
+  } else if (type === Type.Keyboard) {
+    updateInsetsVars('keyb', insets);
+  }
+}
+
+function updateInsetsVars(prefix: string, insets: Insets): void {
+  let style = document.documentElement.style;
+  style.setProperty(`--${prefix}-ins-top`, `${insets.top}px`);
+  style.setProperty(`--${prefix}-ins-right`, `${insets.right}px`);
+  style.setProperty(`--${prefix}-ins-bottom`, `${insets.bottom}px`);
+  style.setProperty(`--${prefix}-ins-left`, `${insets.left}px`);
+}
+
+FullScreen.Type = Type;
+FullScreen.Style = Style;
+
 export { FullScreen };
