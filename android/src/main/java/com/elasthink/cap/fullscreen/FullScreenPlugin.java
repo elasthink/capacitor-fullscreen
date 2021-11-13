@@ -34,10 +34,16 @@ public class FullScreenPlugin extends Plugin {
 
     private static final String TAG = "FullScreen";
 
-    private Rect insets = null;
+    private static final String TYPE_SAFE_AREA      = "safe-area";
+    private static final String TYPE_STATUS_BAR     = "status-bar";
+    private static final String TYPE_NAVIGATION_BAR = "navigation-bar";
+    private static final String TYPE_KEYBOARD       = "keyboard";
+    private static final String TYPE_ACCESSORY_BAR  = "accessory-bar";
+
+    private static final String STYLE_LIGHT = "light";
+    private static final String STYLE_DARK  = "dark";
 
     private boolean isStatusBarHidden = false;
-
     private boolean isNavigationBarHidden = false;
 
     @Override
@@ -58,7 +64,8 @@ public class FullScreenPlugin extends Plugin {
 
         ViewCompat.setOnApplyWindowInsetsListener(decorView, (view, windowInsets) -> {
             Logger.debug(TAG, "onApplyWindowInsetsListener()");
-            fireInsetsChangeEvent("safe-area", getSafeAreaInsets(windowInsets));
+            fireInsetsChangeEvent(TYPE_SAFE_AREA, getSafeAreaInsets(windowInsets));
+            fireInsetsChangeEvent(TYPE_KEYBOARD, windowInsets.getInsets(WindowInsetsCompat.Type.ime()));
             return WindowInsetsCompat.CONSUMED;
         });
 
@@ -145,11 +152,11 @@ public class FullScreenPlugin extends Plugin {
     private Insets getSafeAreaInsets(WindowInsetsCompat windowInsets) {
         Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout());
         if (!isStatusBarHidden) {
-            // NO FUNCIONA: windowInsets.isVisible(WindowInsetsCompat.Type.statusBars())
+            // NOT WORKING! windowInsets.isVisible(WindowInsetsCompat.Type.statusBars())
             insets = Insets.max(insets, windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()));
         }
         if (!isNavigationBarHidden) {
-            // NO FUNCIONA: windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars())
+            // NOT WORKING! windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars())
             insets = Insets.max(insets, windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()));
         }
         return insets;
@@ -163,12 +170,15 @@ public class FullScreenPlugin extends Plugin {
             return;
         }
         final JSObject data = new JSObject();
+        final WindowInsetsCompat windowInsets = getWindowInsets();
         if ("status-bar".equals(type)) {
+            // NOT WORKING! windowInsets.isVisible(WindowInsetsCompat.Type.statusBars())
             data.put("visible", !isStatusBarHidden);
         } else if ("navigation-bar".equals(type)) {
+            // NOT WORKING! windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars())
             data.put("visible", !isNavigationBarHidden);
         } else if ("keyboard".equals(type)) {
-            call.unimplemented("Not yet implemented!");
+            data.put("visible", windowInsets.isVisible(WindowInsetsCompat.Type.ime()));
             return;
         } else {
             call.unimplemented("Not supported.");

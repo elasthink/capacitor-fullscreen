@@ -6,8 +6,7 @@ import { Type, Style } from './definitions';
 
 const FullScreen = registerPlugin<FullScreenPlugin>('FullScreen');
 
-// window.addEventListener('DOMContentLoaded', async () => {
-console.log('Getting insets...');
+// Init
 for (const t of [Type.SafeArea, Type.Keyboard]) {
   FullScreen.getInsets({ type: t }).then(insets => {
     if (insets) {
@@ -15,21 +14,25 @@ for (const t of [Type.SafeArea, Type.Keyboard]) {
     }
   });
 }
-// });
 
+// Event: insetschange
 window.addEventListener('insetschange', {
   handleEvent(event: InsetsEvent): void {
-    console.log(`insetschange: ${JSON.stringify(event.detail)}`);
     updateInsets(event.detail.type, event.detail.insets);
   }
 });
 
 function updateInsets(type: Type, insets: Insets): void {
+  console.log(`Updating insets (${type}): ${JSON.stringify(insets)}`);
+  let prefix;
   if (type === Type.SafeArea) {
-    updateInsetsVars('safe', insets);
+    prefix = 'safe';
   } else if (type === Type.Keyboard) {
-    updateInsetsVars('keyb', insets);
+    prefix = 'keyb';
+  } else {
+    return;
   }
+  updateInsetsVars(prefix, insets);
 }
 
 function updateInsetsVars(prefix: string, insets: Insets): void {
