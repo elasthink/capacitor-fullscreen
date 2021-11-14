@@ -8,99 +8,216 @@ import Capacitor
 @objc(FullScreenPlugin)
 public class FullScreenPlugin: CAPPlugin {
     
-    private let insets:UIEdgeInsets = UIEdgeInsets.zero;
+    private var safeAreaInsets: UIEdgeInsets = UIEdgeInsets.zero
     
-    private let implementation = FullScreen();
+    private var keyboardHeight: CGFloat = 0
     
-    static func fireInsetsChangeEvent(bridge: CAPBridgeProtocol) {
-        let eventData: String = "{\"detail\":{\"type\":\"safe-area\",\"insets\":\(getSafeAreaInsets(bridge: bridge))}}";
-        CAPLog.print("viewSafeAreaInsetsDidChange(\(eventData))");
-        bridge.triggerJSEvent(eventName: "insetschange", target: "document", data: eventData);
-    }
-    
-    static func getSafeAreaInsets(bridge: CAPBridgeProtocol) -> String {
-        let insets: UIEdgeInsets = bridge.webView!.safeAreaInsets;
-        let top: Int = Int(round(insets.top));
-        let left: Int = Int(round(insets.left));
-        let bottom: Int = Int(round(insets.bottom));
-        let right: Int = Int(round(insets.right));
-        return "{\"top\":\(top),\"left\":\(left),\"bottom\":\(bottom),\"right\": \(right)}";
-    }
-    
+    private var keyboardVisible = false
+       
     override public func load() {
-        CAPLog.print("Loading FullScreenPlugin...");
-        super.load();
+        CAPLog.print("Loading FullScreenPlugin...")
+        super.load()
+        initKeyboard();
+    }
+    
+    
+    func viewSafeAreaInsetsDidChange() {
+        if let ins = bridge?.webView?.safeAreaInsets {
+            safeAreaInsets = ins
+            notifySafeAreaInsetsChange(insets: ins);
+        }
+    }
+    
+    private func notifySafeAreaInsetsChange(insets: UIEdgeInsets) {
+        notifyListeners("insets", data: [
+            "type": "safe-area",
+            "insets": [
+                "top": Int(round(insets.top)),
+                "right": Int(round(insets.right)),
+                "bottom": Int(round(insets.bottom)),
+                "left": Int(round(insets.left))
+            ]
+        ]);
+    }
+    
+    @objc private func initKeyboard() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow(notification:)),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardDidHide(notification:)),
+            name: UIResponder.keyboardDidHideNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardDidChangeFrame(notification:)),
+            name: UIResponder.keyboardDidChangeFrameNotification,
+            object: nil)
+    }
+    
+    @objc private func keyboardWillShow(notification: Notification) {
+        print("keyboardWillShow");
+        keyboardVisible = true
+        if let bounds = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            // NOTE: Assuming that the keyboard is always glued to the bottom.
+            keyboardHeight = bounds.height
+            notifyKeyboardInsetsChange(height: keyboardHeight)
+        }
+    }
+    
+    @objc private func keyboardDidHide(notification: Notification) {
+        print("keyboardDidHide");
+        keyboardVisible = false
+        keyboardHeight = 0
+        notifyKeyboardInsetsChange(height: keyboardHeight)
+    }
+    
+    @objc private func keyboardDidChangeFrame(notification: Notification) {
+        print("keyboardDidChangeFrame");
+        if let bounds = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            // NOTE: Assuming that the keyboard is always glued to the bottom.
+            keyboardHeight = bounds.height
+            notifyKeyboardInsetsChange(height: keyboardHeight)
+        }
+    }
+    
+    private func notifyKeyboardInsetsChange(height: CGFloat) {
+        notifyListeners("insets", data: [
+            "type": "keyboard",
+            "insets": [
+                "bottom": Int(round(height))
+            ]
+        ]);
     }
 
-    @objc func toggle(_ call: CAPPluginCall) {
-        let type: String? = call.getString("type")
-        if type == nil {
-            call.reject("Parameter \"type\" is required.")
-        }
-        let show: Bool? = call.getBool("show");
-        if show == nil {
-            call.reject("Parameter \"show\" is required.")
-        }
-        if type == "status-bar" {
-            bridge?.statusBarVisible = show!
-        } else if type == "navigation-bar" {
-            bridge?.viewController?.navigationController?.setNavigationBarHidden(show!, animated: true)
-        } else if type == "accessory-bar" {
-            if show! {
-                // ...
-            } else {
-                // ...
-            }
-        } else {
-            call.unavailable("Not available.")
-            return;
-        }
-        call.resolve()
+    
+    /* STATUS-BAR
+     * ============================================================================================================== */
+    
+    @objc func showStatusBar(_ call: CAPPluginCall) {
+        bridge?.statusBarVisible = true;
+        call.resolve();
     }
     
-    @objc func getInsets(_ call: CAPPluginCall) {
-        let type: String? = call.getString("type")
-        if type == nil {
-            call.reject("Parameter \"type\" is required.")
-        }
-        if type == "safe-area" {
-            let insets: UIEdgeInsets = bridge!.webView!.safeAreaInsets;
+    @objc func hideStatusBar(_ call: CAPPluginCall) {
+        bridge?.statusBarVisible = false;
+        call.resolve();
+    }
+    
+    @objc func setStatusBarColor(_ call: CAPPluginCall) {
+        call.unimplemented("Not yet implemented!")
+    }
+    
+    @objc func setStatusBarStyle(_ call: CAPPluginCall) {
+        call.unimplemented("Not yet implemented!")
+    }
+    
+    @objc func isStatusBarVisible(_ call: CAPPluginCall) {
+        if let visible = bridge?.statusBarVisible {
             call.resolve([
-                "top": Int(round(insets.top)),
-                "left": Int(round(insets.left)),
-                "bottom": Int(round(insets.bottom)),
-                "right": Int(round(insets.right))
+                "visible": visible
             ]);
-            return;
         } else {
-            call.unavailable("Not available.")
+            call.reject("Unable to check if the status bar is visible or not.")
         }
-        call.resolve();
     }
     
-    @objc func isVisible(_ call: CAPPluginCall) {
-        call.resolve();
+    
+    /* NAVIGATION-BAR
+     * ============================================================================================================== */
+    
+    @objc func showNavigationBar(_ call: CAPPluginCall) {
+        if let controller = bridge?.viewController?.navigationController {
+            controller.setNavigationBarHidden(true, animated: true)
+            call.resolve()
+        } else {
+            call.reject("Unable to show navigation bar")
+        }
     }
     
-    @objc func setColor(_ call: CAPPluginCall) {
-        call.resolve();
+    @objc func hideNavigationBar(_ call: CAPPluginCall) {
+        if let controller = bridge?.viewController?.navigationController {
+            controller.setNavigationBarHidden(false, animated: true)
+            call.resolve()
+        } else {
+            call.reject("Unable to hide navigation bar")
+        }
     }
     
-    @objc func setStyle(_ call: CAPPluginCall) {
-        call.resolve();
+    @objc func setNavigationBarColor(_ call: CAPPluginCall) {
+        call.unimplemented("Not yet implemented!")
+    }
+    
+    @objc func setNavigationBarStyle(_ call: CAPPluginCall) {
+        call.unimplemented("Not yet implemented!")
+    }
+    
+    @objc func isNavigationBarVisible(_ call: CAPPluginCall) {
+        call.unimplemented("Not yet implemented!")
+    }
+    
+    
+    /* KEYBOARD
+     * ============================================================================================================== */
+    
+    @objc func showKeyboard(_ call: CAPPluginCall) {
+        call.unavailable("Not implemented on iOS.")
+    }
+    
+    @objc func hideKeyboard(_ call: CAPPluginCall) {
+        call.unavailable("Not implemented on iOS.")
+    }
+    
+    @objc func showAccessoryBar(_ call: CAPPluginCall) {
+        call.unimplemented("Not yet implemented!")
+    }
+    
+    @objc func hideAccessoryBar(_ call: CAPPluginCall) {
+        call.unimplemented("Not yet implemented!")
+    }
+    
+    @objc func isKeyboardVisible(_ call: CAPPluginCall) {
+        call.resolve([
+            "visible": keyboardVisible
+        ])
+    }
+    
+    @objc func getKeyboardInsets(_ call: CAPPluginCall) {
+        call.resolve([
+            "bottom": Int(round(keyboardHeight))
+        ]);
     }
     
     @objc func toggleScroll(_ call: CAPPluginCall) {
-        call.resolve();
+        call.unimplemented("Not yet implemented!")
     }
-        
+    
+    
+    /* INSETS
+     * ============================================================================================================== */
+
+    @objc func getSafeAreaInsets(_ call: CAPPluginCall) {
+        call.resolve([
+            "top": Int(round(safeAreaInsets.top)),
+            "right": Int(round(safeAreaInsets.right)),
+            "bottom": Int(round(safeAreaInsets.bottom)),
+            "left": Int(round(safeAreaInsets.left))
+        ]);
+    }
+    
 }
 
 extension CAPBridgeViewController {
     
     override public func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange();
-        FullScreenPlugin.fireInsetsChangeEvent(bridge: bridge!);
+        if let plugin = bridge?.plugin(withName: "FullScreen") as? FullScreenPlugin {
+            plugin.viewSafeAreaInsetsDidChange();
+        }
+        // FullScreenPlugin.fireInsetsChangeEvent(bridge: bridge!);
     }
     
 }
