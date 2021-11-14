@@ -3,12 +3,9 @@ export enum Style {
   Light = 'light'
 }
 
-export enum Type {
+export enum InsetsType {
   SafeArea = "safe-area",
-  StatusBar = "status-bar",
-  NavigationBar = "navigation-bar",
-  Keyboard = "keyboard",
-  AccessoryBar = "accessory-bar"
+  Keyboard = "keyboard"
 }
 
 export interface Insets {
@@ -18,22 +15,16 @@ export interface Insets {
   left : number
 }
 
-export interface InsetsEvent extends Event {
-  detail: {
-    type: Type,
-    insets: Insets
-  }
+export interface InsetsEvent {
+  type: InsetsType,
+  insets: Insets
 }
 
-export interface InsetsOptions {
-  type: Type
-}
-
-export interface ColorOptions extends InsetsOptions {
+export interface ColorOptions {
   color: string
 }
 
-export interface StyleOptions extends InsetsOptions {
+export interface StyleOptions {
   style: Style
 }
 
@@ -43,20 +34,60 @@ export interface ScrollOptions {
 
 export interface FullScreenPlugin {
 
-  Type: any,
 
-  Style: any,
+  /* STATUS-BAR
+   * ================================================================================================================ */
 
-  toggle(options: InsetsOptions): Promise<void>
+  showStatusBar(): Promise<void>
 
-  getInsets(options: InsetsOptions): Promise<Insets>
+  hideStatusBar(): Promise<void>
 
-  isVisible(options: InsetsOptions): Promise<boolean>
+  setStatusBarColor(options: ColorOptions): Promise<void>
 
-  setColor(options: ColorOptions): Promise<boolean>
+  setStatusBarStyle(options: StyleOptions): Promise<void>
 
-  setStyle(options: StyleOptions): Promise<boolean>
+  isStatusBarVisible(): Promise<boolean>
+
+
+  /* NAVIGATION-BAR
+   * ================================================================================================================ */
+
+  showNavigationBar(): Promise<void>
+
+  hideNavigationBar(): Promise<void>
+
+  setNavigationBarColor(options: ColorOptions): Promise<void>
+
+  setNavigationBarStyle(options: StyleOptions): Promise<void>
+
+  isNavigationBarVisible(): Promise<boolean>
+
+
+  /* KEYBOARD
+   * ================================================================================================================ */
+
+  showKeyboard(): Promise<void>
+
+  hideKeyboard(): Promise<void>
+
+  showAccessoryBar(): Promise<void>
+
+  hideAccessoryBar(): Promise<void>
+
+  getKeyboardInsets(): Promise<Insets>
 
   toggleScroll(options: ScrollOptions): Promise<void>
+
+
+  /* INSETS
+   * ================================================================================================================ */
+
+  getSafeAreaInsets(): Promise<Insets>
+
+  addListener(eventName: 'insets', listener: (event: InsetsEvent) => void): Promise<void>
+
+  addListener(eventName: 'keyboardshow', listener: (insets: Insets) => void): Promise<void>
+
+  addListener(eventName: 'keyboardhide', listener: () => void): Promise<void>
 
 }
