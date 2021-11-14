@@ -74,6 +74,8 @@ export interface FullScreenPlugin {
 
   hideAccessoryBar(): Promise<void>
 
+  isKeyboardVisible(): Promise<boolean>
+
   getKeyboardInsets(): Promise<Insets>
 
   toggleScroll(options: ScrollOptions): Promise<void>
