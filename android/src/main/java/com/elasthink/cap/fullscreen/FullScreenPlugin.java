@@ -27,8 +27,8 @@ public class FullScreenPlugin extends Plugin {
 
     private static final String TAG = "FullScreen";
 
-    private static final String TYPE_SAFE_AREA      = "safe-area";
-    private static final String TYPE_KEYBOARD       = "keyboard";
+    private static final String TYPE_SAFE_AREA = "safe-area";
+    private static final String TYPE_KEYBOARD  = "keyboard";
 
     private static final String STYLE_LIGHT = "light";
     private static final String STYLE_DARK  = "dark";
@@ -126,6 +126,8 @@ public class FullScreenPlugin extends Plugin {
     public void isStatusBarVisible(PluginCall call) {
         JSObject data = new JSObject();
         data.put("visible", statusBarVisible);
+        // NOT WORKING!
+        // data.put("visible", getWindowInsets().isVisible(WindowInsetsCompat.Type.statusBars()));
         call.resolve(data);
     }
 
@@ -185,6 +187,8 @@ public class FullScreenPlugin extends Plugin {
     public void isNavigationBarVisible(PluginCall call) {
         JSObject data = new JSObject();
         data.put("visible", navigationBarVisible);
+        // NOT WORKING!
+        // data.put("visible", getWindowInsets().isVisible(WindowInsetsCompat.Type.navigationBars()));
         call.resolve(data);
     }
 
@@ -193,12 +197,16 @@ public class FullScreenPlugin extends Plugin {
      * ========================================================================================== */
     @PluginMethod
     public void showKeyboard(PluginCall call) {
-        getController().show(WindowInsetsCompat.Type.ime());
+        bridge.executeOnMainThread(() -> {
+            getController().show(WindowInsetsCompat.Type.ime());
+        });
     }
 
     @PluginMethod
     public void hideKeyboard(PluginCall call) {
-        getController().hide(WindowInsetsCompat.Type.ime());
+        bridge.executeOnMainThread(() -> {
+            getController().hide(WindowInsetsCompat.Type.ime());
+        });
     }
 
     @PluginMethod
