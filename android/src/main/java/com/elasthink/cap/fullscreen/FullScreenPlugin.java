@@ -1,16 +1,11 @@
 package com.elasthink.cap.fullscreen;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Build;
-import android.os.IBinder;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
 
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -23,28 +18,29 @@ import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
-import com.getcapacitor.WebViewListener;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.util.WebColor;
 
-import java.util.ArrayList;
 
 @CapacitorPlugin(name = "FullScreen")
 public class FullScreenPlugin extends Plugin {
 
     private static final String TAG = "FullScreen";
 
-    private static final String TYPE_SAFE_AREA      = "safe-area";
-    private static final String TYPE_STATUS_BAR     = "status-bar";
-    private static final String TYPE_NAVIGATION_BAR = "navigation-bar";
-    private static final String TYPE_KEYBOARD       = "keyboard";
-    private static final String TYPE_ACCESSORY_BAR  = "accessory-bar";
+    private static final String TYPE_SAFE_AREA = "safe-area";
+    private static final String TYPE_KEYBOARD  = "keyboard";
 
     private static final String STYLE_LIGHT = "light";
     private static final String STYLE_DARK  = "dark";
 
-    private boolean isStatusBarHidden = false;
-    private boolean isNavigationBarHidden = false;
+    private boolean statusBarVisible = true;
+
+    private boolean navigationBarVisible = true;
+
+    private Insets keyboardInsets = Insets.NONE;
+
+    private Insets safeAreaInsets = Insets.NONE;
+
 
     @Override
     public void load() {
@@ -64,8 +60,8 @@ public class FullScreenPlugin extends Plugin {
 
         ViewCompat.setOnApplyWindowInsetsListener(decorView, (view, windowInsets) -> {
             Logger.debug(TAG, "onApplyWindowInsetsListener()");
-            fireInsetsChangeEvent(TYPE_SAFE_AREA, getSafeAreaInsets(windowInsets));
-            fireInsetsChangeEvent(TYPE_KEYBOARD, windowInsets.getInsets(WindowInsetsCompat.Type.ime()));
+            notifyInsets(TYPE_SAFE_AREA, safeAreaInsets = computeSafeAreaInsets(windowInsets));
+            notifyInsets(TYPE_KEYBOARD, keyboardInsets = computeKeyboardInsets(windowInsets));
             return WindowInsetsCompat.CONSUMED;
         });
 
@@ -74,143 +70,39 @@ public class FullScreenPlugin extends Plugin {
         window.setNavigationBarColor(Color.TRANSPARENT);
     }
 
+
+    /* STATUS-BAR
+     * ========================================================================================== */
     @PluginMethod
-    public void toggle(PluginCall call) {
-        final String type = call.getString("type");
-        if (type == null) {
-            call.reject("Parameter \"type\" is required.");
-            return;
-        }
-        final Boolean show = call.getBoolean("show");
-        if (show == null) {
-            call.reject("Parameter \"show\" is required.");
-            return;
-        }
+    public void showStatusBar(PluginCall call) {
         bridge.executeOnMainThread(() -> {
-            final WindowInsetsControllerCompat controller = getController();
-            if ("status-bar".equals(type)) {
-                if (show) {
-                    controller.show(WindowInsetsCompat.Type.statusBars());
-                } else {
-                    controller.hide(WindowInsetsCompat.Type.statusBars());
-                }
-                isStatusBarHidden = !show;
-            } else if ("navigation-bar".equals(type)) {
-                if (show) {
-                    controller.show(WindowInsetsCompat.Type.navigationBars());
-                } else {
-                    controller.hide(WindowInsetsCompat.Type.navigationBars());
-                }
-                isNavigationBarHidden = !show;
-
-            } else if ("keyboard".equals(type)) {
-//                final Activity activity = getActivity();
-//                final View decorView = activity.getWindow().getDecorView();
-//                final InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-//                if (show) {
-//                    imm.showSoftInput(decorView, InputMethodManager.SHOW_IMPLICIT); // SHOW_FORCED?
-//                } else {
-//                    imm.hideSoftInputFromWindow(decorView.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
-//                }
-                if (show) {
-                    controller.show(WindowInsetsCompat.Type.ime());
-                } else {
-                    controller.hide(WindowInsetsCompat.Type.ime());
-                }
-            } else if ("accessory-bar".equals(type)) {
-                call.unimplemented("Not implemented on Android.");
-                return;
-            }
-            call.resolve();
+            WindowInsetsControllerCompat controller = getController();
+            controller.show(WindowInsetsCompat.Type.statusBars());
         });
+        statusBarVisible = true;
     }
 
     @PluginMethod
-    public void getInsets(PluginCall call) {
-        final String type = call.getString("type");
-        if (type == null) {
-            call.reject("Parameter \"type\" is required.");
-            return;
-        }
-        final WindowInsetsCompat windowInsets = getWindowInsets();
-        Insets insets = null;
-        if ("safe-area".equals(type)) {
-            insets = getSafeAreaInsets(windowInsets);
-        } else if ("status-bar".equals(type)) {
-            insets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars());
-        } else if ("navigation-bar".equals(type)) {
-            insets = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars());
-        } else if ("keyboard".equals(type)) {
-            insets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
-        } else if ("accessory-bar".equals(type)) {
-            call.unimplemented("Not implemented on Android.");
-            return;
-        }
-        call.resolve(insetsToJSObject(insets));
-    }
-
-    private Insets getSafeAreaInsets(WindowInsetsCompat windowInsets) {
-        Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout());
-        if (!isStatusBarHidden) {
-            // NOT WORKING! windowInsets.isVisible(WindowInsetsCompat.Type.statusBars())
-            insets = Insets.max(insets, windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()));
-        }
-        if (!isNavigationBarHidden) {
-            // NOT WORKING! windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars())
-            insets = Insets.max(insets, windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()));
-        }
-        return insets;
+    public void hideStatusBar(PluginCall call) {
+        bridge.executeOnMainThread(() -> {
+            WindowInsetsControllerCompat controller = getController();
+            controller.hide(WindowInsetsCompat.Type.statusBars());
+        });
+        statusBarVisible = false;
     }
 
     @PluginMethod
-    public void isVisible(PluginCall call) {
-        final String type = call.getString("type");
-        if (type == null) {
-            call.reject("Parameter \"type\" is required.");
-            return;
-        }
-        final JSObject data = new JSObject();
-        final WindowInsetsCompat windowInsets = getWindowInsets();
-        if ("status-bar".equals(type)) {
-            // NOT WORKING! windowInsets.isVisible(WindowInsetsCompat.Type.statusBars())
-            data.put("visible", !isStatusBarHidden);
-        } else if ("navigation-bar".equals(type)) {
-            // NOT WORKING! windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars())
-            data.put("visible", !isNavigationBarHidden);
-        } else if ("keyboard".equals(type)) {
-            data.put("visible", windowInsets.isVisible(WindowInsetsCompat.Type.ime()));
-            return;
-        } else {
-            call.unimplemented("Not supported.");
-            return;
-        }
-        call.resolve(data);
-    }
-
-    @PluginMethod
-    public void setColor(PluginCall call) {
-        final String type = call.getString("type");
-        if (type == null) {
-            call.reject("Parameter \"type\" is required.");
-            return;
-        }
+    public void setStatusBarColor(PluginCall call) {
         final String color = call.getString("color");
         if (color == null) {
             call.reject("Parameter \"color\" is required.");
             return;
         }
         bridge.executeOnMainThread(() -> {
+            final Window window = bridge.getActivity().getWindow();
             try {
-                final Window window = bridge.getActivity().getWindow();
                 final int c = WebColor.parseColor(color.toUpperCase());
-                if ("status-bar".equals(type)) {
-                    window.setStatusBarColor(c);
-                } else if ("navigation-bar".equals(type)) {
-                    window.setNavigationBarColor(c);
-                } else {
-                    call.unimplemented("Not supported.");
-                    return;
-                }
+                window.setStatusBarColor(c);
                 call.resolve();
             } catch (IllegalArgumentException ex) {
                 call.reject("Invalid color format");
@@ -219,52 +111,174 @@ public class FullScreenPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void setStyle(PluginCall call) {
-        final String type = call.getString("type");
-        if (type == null) {
-            call.reject("Parameter \"type\" is required.");
-            return;
-        }
+    public void setStatusBarStyle(PluginCall call) {
         final String style = call.getString("style");
         if (style == null) {
             call.reject("Parameter \"style\" is required.");
             return;
         }
         bridge.executeOnMainThread(() -> {
-            final WindowInsetsControllerCompat controller = getController();
-            if ("status-bar".equals(type)) {
-                controller.setAppearanceLightStatusBars("light".equals(style));
-            } else if ("navigation-bar".equals(type)) {
-                controller.setAppearanceLightNavigationBars("light".equals(style));
-            } else {
-                call.unimplemented("Not supported.");
-                return;
-            }
-            call.resolve();
+            getController().setAppearanceLightStatusBars("light".equals(style));
         });
     }
 
     @PluginMethod
-    public void toggleScroll(PluginCall call) {
-        call.unimplemented("Not yet implemented.");
+    public void isStatusBarVisible(PluginCall call) {
+        JSObject data = new JSObject();
+        data.put("visible", statusBarVisible);
+        // NOT WORKING!
+        // data.put("visible", getWindowInsets().isVisible(WindowInsetsCompat.Type.statusBars()));
+        call.resolve(data);
     }
 
-    private void fireInsetsChangeEvent(String type, Insets insets) {
-        JSObject eventObj = new JSObject();
-        JSObject detailObj = new JSObject();
-        detailObj.put("type", type);
-        detailObj.put("insets", insetsToJSObject(insets));
-        eventObj.put("detail", detailObj);
-        bridge.triggerJSEvent("insetschange", "window", eventObj.toString());
+
+    /* NAVIGATION-BAR
+     * ========================================================================================== */
+    @PluginMethod
+    public void showNavigationBar(PluginCall call) {
+        bridge.executeOnMainThread(() -> {
+            WindowInsetsControllerCompat controller = getController();
+            controller.show(WindowInsetsCompat.Type.navigationBars());
+        });
+        navigationBarVisible = true;
+    }
+
+    @PluginMethod
+    public void hideNavigationBar(PluginCall call) {
+        bridge.executeOnMainThread(() -> {
+            WindowInsetsControllerCompat controller = getController();
+            controller.hide(WindowInsetsCompat.Type.navigationBars());
+        });
+        navigationBarVisible = false;
+    }
+
+    @PluginMethod
+    public void setNavigationBarColor(PluginCall call) {
+        final String color = call.getString("color");
+        if (color == null) {
+            call.reject("Parameter \"color\" is required.");
+            return;
+        }
+        bridge.executeOnMainThread(() -> {
+            final Window window = bridge.getActivity().getWindow();
+            try {
+                final int c = WebColor.parseColor(color.toUpperCase());
+                window.setNavigationBarColor(c);
+                call.resolve();
+            } catch (IllegalArgumentException ex) {
+                call.reject("Invalid color format");
+            }
+        });
+    }
+
+    @PluginMethod
+    public void setNavigationBarStyle(PluginCall call) {
+        final String style = call.getString("style");
+        if (style == null) {
+            call.reject("Parameter \"style\" is required.");
+            return;
+        }
+        bridge.executeOnMainThread(() -> {
+            getController().setAppearanceLightNavigationBars("light".equals(style));
+        });
+    }
+
+    @PluginMethod
+    public void isNavigationBarVisible(PluginCall call) {
+        JSObject data = new JSObject();
+        data.put("visible", navigationBarVisible);
+        // NOT WORKING!
+        // data.put("visible", getWindowInsets().isVisible(WindowInsetsCompat.Type.navigationBars()));
+        call.resolve(data);
+    }
+
+
+    /* KEYBOARD
+     * ========================================================================================== */
+    @PluginMethod
+    public void showKeyboard(PluginCall call) {
+        bridge.executeOnMainThread(() -> {
+            getController().show(WindowInsetsCompat.Type.ime());
+        });
+    }
+
+    @PluginMethod
+    public void hideKeyboard(PluginCall call) {
+        bridge.executeOnMainThread(() -> {
+            getController().hide(WindowInsetsCompat.Type.ime());
+        });
+    }
+
+    @PluginMethod
+    public void showAccessoryBar(PluginCall call) {
+        call.unavailable("Not implemented on Android.");
+    }
+
+    @PluginMethod
+    public void hideAccessoryBar(PluginCall call) {
+        call.unavailable("Not implemented on Android.");
+    }
+
+    @PluginMethod
+    public void isKeyboardVisible(PluginCall call) {
+        JSObject data = new JSObject();
+        data.put("visible", getWindowInsets().isVisible(WindowInsetsCompat.Type.ime()));
+        call.resolve(data);
+    }
+
+    @PluginMethod
+    public void getKeyboardInsets(PluginCall call) {
+        call.resolve(insetsToJSObject(keyboardInsets));
+    }
+
+    @PluginMethod
+    public void toggleScroll(PluginCall call) {
+        call.unavailable("Not implemented on Android.");
+    }
+
+
+    /* INSETS
+     * ========================================================================================== */
+    @PluginMethod
+    public void getSafeAreaInsets(PluginCall call) {
+        call.resolve(insetsToJSObject(safeAreaInsets));
+    }
+
+
+    /* UTIL
+     * ========================================================================================== */
+
+    private Insets computeSafeAreaInsets(WindowInsetsCompat windowInsets) {
+        Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout());
+        if (statusBarVisible) {
+            // NOT WORKING! windowInsets.isVisible(WindowInsetsCompat.Type.statusBars())
+            insets = Insets.max(insets, windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()));
+        }
+        if (navigationBarVisible) {
+            // NOT WORKING! windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars())
+            insets = Insets.max(insets, windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()));
+        }
+        return insets;
+    }
+
+    private Insets computeKeyboardInsets(WindowInsetsCompat windowInsets) {
+        return windowInsets.getInsets(WindowInsetsCompat.Type.ime());
+    }
+
+    private void notifyInsets(String type, Insets insets) {
+        final JSObject data = new JSObject();
+        data.put("type", type);
+        data.put("insets", insetsToJSObject(insets));
+        notifyListeners("insets", data);
     }
 
     private JSObject insetsToJSObject(Insets insets) {
         final float density = getDensity();
         final JSObject obj = new JSObject();
-        obj.put("left", Math.round(insets.left / density));
         obj.put("top", Math.round(insets.top / density));
         obj.put("right", Math.round(insets.right / density));
         obj.put("bottom", Math.round(insets.bottom / density));
+        obj.put("left", Math.round(insets.left / density));
         return obj;
     }
 
