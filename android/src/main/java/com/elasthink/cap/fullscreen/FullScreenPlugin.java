@@ -37,6 +37,8 @@ public class FullScreenPlugin extends Plugin {
 
     private boolean navigationBarVisible = true;
 
+    private boolean keyboardVisible = false;
+
     private Insets keyboardInsets = Insets.NONE;
 
     private Insets safeAreaInsets = Insets.NONE;
@@ -62,6 +64,12 @@ public class FullScreenPlugin extends Plugin {
             Logger.debug(TAG, "onApplyWindowInsetsListener()");
             notifyInsets(TYPE_SAFE_AREA, safeAreaInsets = computeSafeAreaInsets(windowInsets));
             notifyInsets(TYPE_KEYBOARD, keyboardInsets = computeKeyboardInsets(windowInsets));
+
+            final boolean visible = windowInsets.isVisible(WindowInsetsCompat.Type.ime());
+            if (keyboardVisible != visible) {
+                notifyListeners(visible ? "keyboardshow" : "keyboardhide", insetsToJSObject(keyboardInsets));
+                keyboardVisible = visible;
+            }
             return WindowInsetsCompat.CONSUMED;
         });
 
@@ -125,7 +133,7 @@ public class FullScreenPlugin extends Plugin {
             return;
         }
         bridge.executeOnMainThread(() -> {
-            getController().setAppearanceLightStatusBars("light".equals(style));
+            getController().setAppearanceLightStatusBars(STYLE_LIGHT.equals(style));
         });
     }
 
@@ -186,7 +194,7 @@ public class FullScreenPlugin extends Plugin {
             return;
         }
         bridge.executeOnMainThread(() -> {
-            getController().setAppearanceLightNavigationBars("light".equals(style));
+            getController().setAppearanceLightNavigationBars(STYLE_LIGHT.equals(style));
         });
     }
 
