@@ -10,7 +10,7 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
     
     private var safeAreaInsets: UIEdgeInsets = UIEdgeInsets.zero
     
-    private var keyboardHeight: CGFloat = 0
+    private var keyboardInsets: UIEdgeInsets = UIEdgeInsets.zero
     
     private var keyboardVisible = false
     
@@ -23,22 +23,10 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
     }
     
     func viewSafeAreaInsetsDidChange() {
-        if let ins = bridge?.webView?.safeAreaInsets {
-            safeAreaInsets = ins
-            notifySafeAreaInsetsChange(insets: ins);
+        if let insets = bridge?.webView?.safeAreaInsets {
+            safeAreaInsets = insets
+            notifyInsets("safe-area", insets: insets);
         }
-    }
-    
-    private func notifySafeAreaInsetsChange(insets: UIEdgeInsets) {
-        notifyListeners("insets", data: [
-            "type": "safe-area",
-            "insets": [
-                "top": Int(round(insets.top)),
-                "right": Int(round(insets.right)),
-                "bottom": Int(round(insets.bottom)),
-                "left": Int(round(insets.left))
-            ]
-        ]);
     }
     
     @objc private func initKeyboard() {
@@ -64,8 +52,9 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
         keyboardVisible = true
         if let bounds = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
             // NOTE: Assuming that the keyboard is always glued to the bottom.
-            keyboardHeight = bounds.height
-            notifyKeyboardInsetsChange(height: keyboardHeight)
+            keyboardInsets.bottom = bounds.height
+            notifyListeners("keyboardshow", data: sendInsets(keyboardInsets));
+            notifyInsets("keyboard", insets: keyboardInsets)
         }
         if accessoryBarDisabled {
             bridge?.webView?.inputAccessoryView?.removeFromSuperview()
@@ -75,39 +64,41 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
     @objc private func keyboardDidHide(notification: Notification) {
         print("keyboardDidHide");
         keyboardVisible = false
-        keyboardHeight = 0
-        notifyKeyboardInsetsChange(height: keyboardHeight)
+        keyboardInsets.bottom = 0
+        notifyListeners("keyboardshow", data: sendInsets(keyboardInsets));
+        notifyInsets("keyboard", insets: keyboardInsets)
     }
     
     @objc private func keyboardDidChangeFrame(notification: Notification) {
         print("keyboardDidChangeFrame");
         if let bounds = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
             // NOTE: Assuming that the keyboard is always glued to the bottom.
-            keyboardHeight = bounds.height
-            notifyKeyboardInsetsChange(height: keyboardHeight)
+            keyboardInsets.bottom = bounds.height
+            notifyInsets("keyboard", insets: keyboardInsets)
         }
     }
     
-    private func notifyKeyboardInsetsChange(height: CGFloat) {
+    private func notifyInsets(_ type: String, insets: UIEdgeInsets) {
         notifyListeners("insets", data: [
-            "type": "keyboard",
-            "insets": [
-                "bottom": Int(round(height))
-            ]
-        ]);
+            "type": type,
+            "insets": sendInsets(insets)
+        ])
     }
-
+    
+    private func sendInsets(_ insets: UIEdgeInsets) -> [String: Any] {
+        return [
+            "top": Int(round(insets.top)),
+            "right": Int(round(insets.right)),
+            "bottom": Int(round(insets.bottom)),
+            "left": Int(round(insets.left))
+        ]
+    }
     
     /* SAFE-AREA
      * ============================================================================================================== */
 
     @objc func getSafeAreaInsets(_ call: CAPPluginCall) {
-        call.resolve([
-            "top": Int(round(safeAreaInsets.top)),
-            "right": Int(round(safeAreaInsets.right)),
-            "bottom": Int(round(safeAreaInsets.bottom)),
-            "left": Int(round(safeAreaInsets.left))
-        ]);
+        call.resolve(sendInsets(safeAreaInsets));
     }
     
     
@@ -195,9 +186,7 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
     }
     
     @objc func getKeyboardInsets(_ call: CAPPluginCall) {
-        call.resolve([
-            "bottom": Int(round(keyboardHeight))
-        ]);
+        call.resolve(sendInsets(keyboardInsets));
     }
     
     @objc func toggleAccessoryBar(_ call: CAPPluginCall) {
@@ -248,28 +237,3 @@ extension CAPBridgeViewController {
     }
     
 }
-
-extension UIView {
-    
-    var firstResponder: UIView? {
-        guard !isFirstResponder else {
-            return self
-            
-        }
-        for view in subviews {
-            if let firstResponder = view.firstResponder {
-                return firstResponder
-            }
-        }
-        return nil
-    }
-}
-
-//extension WKWebView {
-//
-//    public override var inputAccessoryView: UIView? {
-//        return self.inputAccessoryView
-//    }
-//
-//}
-
