@@ -1,7 +1,7 @@
 import {registerPlugin} from '@capacitor/core';
 
 import type { FullScreenPlugin, Insets } from './definitions';
-import {InsetsType} from "./definitions";
+import { InsetsType } from "./definitions";
 
 const FullScreen = registerPlugin<FullScreenPlugin>('FullScreen');
 

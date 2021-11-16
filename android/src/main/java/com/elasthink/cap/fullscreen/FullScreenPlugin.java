@@ -70,9 +70,16 @@ public class FullScreenPlugin extends Plugin {
         window.setNavigationBarColor(Color.TRANSPARENT);
     }
 
+    /* SAFE-AREA
+     * ============================================================================================================== */
+    @PluginMethod
+    public void getSafeAreaInsets(PluginCall call) {
+        call.resolve(insetsToJSObject(safeAreaInsets));
+    }
+
 
     /* STATUS-BAR
-     * ========================================================================================== */
+     * ============================================================================================================== */
     @PluginMethod
     public void showStatusBar(PluginCall call) {
         bridge.executeOnMainThread(() -> {
@@ -133,7 +140,7 @@ public class FullScreenPlugin extends Plugin {
 
 
     /* NAVIGATION-BAR
-     * ========================================================================================== */
+     * ============================================================================================================== */
     @PluginMethod
     public void showNavigationBar(PluginCall call) {
         bridge.executeOnMainThread(() -> {
@@ -194,7 +201,7 @@ public class FullScreenPlugin extends Plugin {
 
 
     /* KEYBOARD
-     * ========================================================================================== */
+     * ============================================================================================================== */
     @PluginMethod
     public void showKeyboard(PluginCall call) {
         bridge.executeOnMainThread(() -> {
@@ -210,16 +217,6 @@ public class FullScreenPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void showAccessoryBar(PluginCall call) {
-        call.unavailable("Not implemented on Android.");
-    }
-
-    @PluginMethod
-    public void hideAccessoryBar(PluginCall call) {
-        call.unavailable("Not implemented on Android.");
-    }
-
-    @PluginMethod
     public void isKeyboardVisible(PluginCall call) {
         JSObject data = new JSObject();
         data.put("visible", getWindowInsets().isVisible(WindowInsetsCompat.Type.ime()));
@@ -232,21 +229,18 @@ public class FullScreenPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void toggleAccessoryBar(PluginCall call) {
+        call.unavailable("Not implemented on Android.");
+    }
+
+    @PluginMethod
     public void toggleScroll(PluginCall call) {
         call.unavailable("Not implemented on Android.");
     }
 
 
-    /* INSETS
-     * ========================================================================================== */
-    @PluginMethod
-    public void getSafeAreaInsets(PluginCall call) {
-        call.resolve(insetsToJSObject(safeAreaInsets));
-    }
-
-
     /* UTIL
-     * ========================================================================================== */
+     * ============================================================================================================== */
 
     private Insets computeSafeAreaInsets(WindowInsetsCompat windowInsets) {
         Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout());

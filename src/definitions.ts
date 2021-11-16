@@ -28,11 +28,16 @@ export interface StyleOptions {
   style: Style
 }
 
-export interface ScrollOptions {
-  disabled: boolean
+export interface ToggleOptions {
+  enabled: boolean
 }
 
 export interface FullScreenPlugin {
+
+  /* SAFE-AREA
+   * ================================================================================================================ */
+
+  getSafeAreaInsets(): Promise<Insets>
 
 
   /* STATUS-BAR
@@ -70,21 +75,17 @@ export interface FullScreenPlugin {
 
   hideKeyboard(): Promise<void>
 
-  showAccessoryBar(): Promise<void>
-
-  hideAccessoryBar(): Promise<void>
-
   isKeyboardVisible(): Promise<boolean>
 
   getKeyboardInsets(): Promise<Insets>
 
-  toggleScroll(options: ScrollOptions): Promise<void>
+  toggleAccessoryBar(options: ToggleOptions): Promise<void>
+
+  toggleScroll(options: ToggleOptions): Promise<void>
 
 
-  /* INSETS
+  /* EVENTS
    * ================================================================================================================ */
-
-  getSafeAreaInsets(): Promise<Insets>
 
   addListener(eventName: 'insets', listener: (event: InsetsEvent) => void): Promise<void>
 
