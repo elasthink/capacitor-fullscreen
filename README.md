@@ -13,6 +13,7 @@ npx cap sync
 
 <docgen-index>
 
+* [`getSafeAreaInsets()`](#getsafeareainsets)
 * [`showStatusBar()`](#showstatusbar)
 * [`hideStatusBar()`](#hidestatusbar)
 * [`setStatusBarColor(...)`](#setstatusbarcolor)
@@ -25,12 +26,10 @@ npx cap sync
 * [`isNavigationBarVisible()`](#isnavigationbarvisible)
 * [`showKeyboard()`](#showkeyboard)
 * [`hideKeyboard()`](#hidekeyboard)
-* [`showAccessoryBar()`](#showaccessorybar)
-* [`hideAccessoryBar()`](#hideaccessorybar)
 * [`isKeyboardVisible()`](#iskeyboardvisible)
 * [`getKeyboardInsets()`](#getkeyboardinsets)
+* [`toggleAccessoryBar(...)`](#toggleaccessorybar)
 * [`toggleScroll(...)`](#togglescroll)
-* [`getSafeAreaInsets()`](#getsafeareainsets)
 * [`addListener(...)`](#addlistener)
 * [`addListener(...)`](#addlistener)
 * [`addListener(...)`](#addlistener)
@@ -41,6 +40,17 @@ npx cap sync
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### getSafeAreaInsets()
+
+```typescript
+getSafeAreaInsets() => any
+```
+
+**Returns:** <code>any</code>
+
+--------------------
+
 
 ### showStatusBar()
 
@@ -190,28 +200,6 @@ hideKeyboard() => any
 --------------------
 
 
-### showAccessoryBar()
-
-```typescript
-showAccessoryBar() => any
-```
-
-**Returns:** <code>any</code>
-
---------------------
-
-
-### hideAccessoryBar()
-
-```typescript
-hideAccessoryBar() => any
-```
-
-**Returns:** <code>any</code>
-
---------------------
-
-
 ### isKeyboardVisible()
 
 ```typescript
@@ -234,26 +222,30 @@ getKeyboardInsets() => any
 --------------------
 
 
-### toggleScroll(...)
+### toggleAccessoryBar(...)
 
 ```typescript
-toggleScroll(options: ScrollOptions) => any
+toggleAccessoryBar(options: ToggleOptions) => any
 ```
 
 | Param         | Type                                                    |
 | ------------- | ------------------------------------------------------- |
-| **`options`** | <code><a href="#scrolloptions">ScrollOptions</a></code> |
+| **`options`** | <code><a href="#toggleoptions">ToggleOptions</a></code> |
 
 **Returns:** <code>any</code>
 
 --------------------
 
 
-### getSafeAreaInsets()
+### toggleScroll(...)
 
 ```typescript
-getSafeAreaInsets() => any
+toggleScroll(options: ToggleOptions) => any
 ```
+
+| Param         | Type                                                    |
+| ------------- | ------------------------------------------------------- |
+| **`options`** | <code><a href="#toggleoptions">ToggleOptions</a></code> |
 
 **Returns:** <code>any</code>
 
@@ -311,6 +303,16 @@ addListener(eventName: 'keyboardhide', listener: () => void) => any
 ### Interfaces
 
 
+#### Insets
+
+| Prop         | Type                |
+| ------------ | ------------------- |
+| **`top`**    | <code>number</code> |
+| **`right`**  | <code>number</code> |
+| **`bottom`** | <code>number</code> |
+| **`left`**   | <code>number</code> |
+
+
 #### ColorOptions
 
 | Prop        | Type                |
@@ -325,21 +327,11 @@ addListener(eventName: 'keyboardhide', listener: () => void) => any
 | **`style`** | <code><a href="#style">Style</a></code> |
 
 
-#### Insets
+#### ToggleOptions
 
-| Prop         | Type                |
-| ------------ | ------------------- |
-| **`top`**    | <code>number</code> |
-| **`right`**  | <code>number</code> |
-| **`bottom`** | <code>number</code> |
-| **`left`**   | <code>number</code> |
-
-
-#### ScrollOptions
-
-| Prop           | Type                 |
-| -------------- | -------------------- |
-| **`disabled`** | <code>boolean</code> |
+| Prop          | Type                 |
+| ------------- | -------------------- |
+| **`enabled`** | <code>boolean</code> |
 
 
 #### InsetsEvent
