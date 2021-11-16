@@ -22,7 +22,6 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
         initKeyboard();
     }
     
-    
     func viewSafeAreaInsetsDidChange() {
         if let ins = bridge?.webView?.safeAreaInsets {
             safeAreaInsets = ins
@@ -48,14 +47,6 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
             selector: #selector(keyboardWillShow(notification:)),
             name: UIResponder.keyboardWillShowNotification,
             object: nil)
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardDidShow(notification:)),
-            name: UIResponder.keyboardDidShowNotification,
-            object: nil)
-        
-        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardDidHide(notification:)),
@@ -79,28 +70,6 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
         if accessoryBarDisabled {
             bridge?.webView?.inputAccessoryView?.removeFromSuperview()
         }
-    }
-    
-    @objc private func keyboardDidShow(notification: Notification) {
-        print("keyboardDidShow");
-        // let responder = bridge?.webView?.firstResponder //  as? UITextField
-        let responder = findFirstResponder(view: bridge!.webView!)
-        if (responder != nil) {
-            CAPLog.print(responder?.isHidden);
-            // responder?.removeFromSuperview()
-            // responder!.autocorrectionType = UITextAutocorrectionType.no
-        }
-    }
-    
-    private func findFirstResponder(view: UIView) -> UIView? {
-        for v in view.subviews {
-            if let fr = findFirstResponder(view: v) {
-                return fr
-            } else if v.isFirstResponder {
-                return v
-            }
-        }
-        return nil
     }
     
     @objc private func keyboardDidHide(notification: Notification) {
@@ -128,6 +97,19 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
         ]);
     }
 
+    
+    /* SAFE-AREA
+     * ============================================================================================================== */
+
+    @objc func getSafeAreaInsets(_ call: CAPPluginCall) {
+        call.resolve([
+            "top": Int(round(safeAreaInsets.top)),
+            "right": Int(round(safeAreaInsets.right)),
+            "bottom": Int(round(safeAreaInsets.bottom)),
+            "left": Int(round(safeAreaInsets.left))
+        ]);
+    }
+    
     
     /* STATUS-BAR
      * ============================================================================================================== */
@@ -206,21 +188,6 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
         call.unavailable("Not implemented on iOS.")
     }
     
-    @objc func showAccessoryBar(_ call: CAPPluginCall) {
-        accessoryBarDisabled = false
-        call.resolve();
-    }
-    
-    @objc func hideAccessoryBar(_ call: CAPPluginCall) {
-        accessoryBarDisabled = true
-        DispatchQueue.main.async {
-            self.bridge?.webView?.inputAccessoryView?.removeFromSuperview()
-//            self.bridge?.webView?.inputViewController.
-//            self.bridge?.webView?.inputAssistantItem.trailingBarButtonGroups = nil
-        }
-        call.resolve();
-     }
-    
     @objc func isKeyboardVisible(_ call: CAPPluginCall) {
         call.resolve([
             "visible": keyboardVisible
@@ -231,6 +198,20 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
         call.resolve([
             "bottom": Int(round(keyboardHeight))
         ]);
+    }
+    
+    @objc func toggleAccessoryBar(_ call: CAPPluginCall) {
+        let enabled: Bool? = call.getBool("enabled")
+        if enabled == nil {
+            call.reject("Parameter \"enabled\" is required.");
+        }
+        accessoryBarDisabled = !(enabled!)
+        if accessoryBarDisabled {
+            DispatchQueue.main.async {
+                self.bridge?.webView?.inputAccessoryView?.removeFromSuperview()
+            }
+        }
+        call.resolve();
     }
     
     @objc func toggleScroll(_ call: CAPPluginCall) {
@@ -254,20 +235,7 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset = CGPoint.zero
     }
-    
-    
-    /* INSETS
-     * ============================================================================================================== */
 
-    @objc func getSafeAreaInsets(_ call: CAPPluginCall) {
-        call.resolve([
-            "top": Int(round(safeAreaInsets.top)),
-            "right": Int(round(safeAreaInsets.right)),
-            "bottom": Int(round(safeAreaInsets.bottom)),
-            "left": Int(round(safeAreaInsets.left))
-        ]);
-    }
-    
 }
 
 extension CAPBridgeViewController {
