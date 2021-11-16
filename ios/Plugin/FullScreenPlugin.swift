@@ -6,13 +6,15 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(FullScreenPlugin)
-public class FullScreenPlugin: CAPPlugin {
+public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
     
     private var safeAreaInsets: UIEdgeInsets = UIEdgeInsets.zero
     
     private var keyboardHeight: CGFloat = 0
     
     private var keyboardVisible = false
+    
+    private var accessoryBarDisabled = false
        
     override public func load() {
         CAPLog.print("Loading FullScreenPlugin...")
@@ -46,6 +48,14 @@ public class FullScreenPlugin: CAPPlugin {
             selector: #selector(keyboardWillShow(notification:)),
             name: UIResponder.keyboardWillShowNotification,
             object: nil)
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardDidShow(notification:)),
+            name: UIResponder.keyboardDidShowNotification,
+            object: nil)
+        
+        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardDidHide(notification:)),
@@ -66,6 +76,31 @@ public class FullScreenPlugin: CAPPlugin {
             keyboardHeight = bounds.height
             notifyKeyboardInsetsChange(height: keyboardHeight)
         }
+        if accessoryBarDisabled {
+            bridge?.webView?.inputAccessoryView?.removeFromSuperview()
+        }
+    }
+    
+    @objc private func keyboardDidShow(notification: Notification) {
+        print("keyboardDidShow");
+        // let responder = bridge?.webView?.firstResponder //  as? UITextField
+        let responder = findFirstResponder(view: bridge!.webView!)
+        if (responder != nil) {
+            CAPLog.print(responder?.isHidden);
+            // responder?.removeFromSuperview()
+            // responder!.autocorrectionType = UITextAutocorrectionType.no
+        }
+    }
+    
+    private func findFirstResponder(view: UIView) -> UIView? {
+        for v in view.subviews {
+            if let fr = findFirstResponder(view: v) {
+                return fr
+            } else if v.isFirstResponder {
+                return v
+            }
+        }
+        return nil
     }
     
     @objc private func keyboardDidHide(notification: Notification) {
@@ -172,12 +207,19 @@ public class FullScreenPlugin: CAPPlugin {
     }
     
     @objc func showAccessoryBar(_ call: CAPPluginCall) {
-        call.unimplemented("Not yet implemented!")
+        accessoryBarDisabled = false
+        call.resolve();
     }
     
     @objc func hideAccessoryBar(_ call: CAPPluginCall) {
-        call.unimplemented("Not yet implemented!")
-    }
+        accessoryBarDisabled = true
+        DispatchQueue.main.async {
+            self.bridge?.webView?.inputAccessoryView?.removeFromSuperview()
+//            self.bridge?.webView?.inputViewController.
+//            self.bridge?.webView?.inputAssistantItem.trailingBarButtonGroups = nil
+        }
+        call.resolve();
+     }
     
     @objc func isKeyboardVisible(_ call: CAPPluginCall) {
         call.resolve([
@@ -192,7 +234,25 @@ public class FullScreenPlugin: CAPPlugin {
     }
     
     @objc func toggleScroll(_ call: CAPPluginCall) {
-        call.unimplemented("Not yet implemented!")
+        let enabled: Bool? = call.getBool("enabled")
+        if enabled == nil {
+            call.reject("Parameter \"enabled\" is required.");
+        }
+        DispatchQueue.main.async {
+            if let view: UIScrollView = self.bridge?.webView?.scrollView {
+                if enabled! {
+                    view.isScrollEnabled = true
+                    view.delegate = nil
+                } else {
+                    view.isScrollEnabled = false
+                    view.delegate = self
+                }
+            }
+        }
+    }
+    
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        scrollView.contentOffset = CGPoint.zero
     }
     
     
@@ -217,14 +277,31 @@ extension CAPBridgeViewController {
         if let plugin = bridge?.plugin(withName: "FullScreen") as? FullScreenPlugin {
             plugin.viewSafeAreaInsetsDidChange();
         }
-        // FullScreenPlugin.fireInsetsChangeEvent(bridge: bridge!);
     }
     
 }
 
-extension WKWebView {
+extension UIView {
     
-    public override var inputAccessoryView: UIView? {
-        return nil; // self.inputAccessoryView;
+    var firstResponder: UIView? {
+        guard !isFirstResponder else {
+            return self
+            
+        }
+        for view in subviews {
+            if let firstResponder = view.firstResponder {
+                return firstResponder
+            }
+        }
+        return nil
     }
 }
+
+//extension WKWebView {
+//
+//    public override var inputAccessoryView: UIView? {
+//        return self.inputAccessoryView
+//    }
+//
+//}
+
