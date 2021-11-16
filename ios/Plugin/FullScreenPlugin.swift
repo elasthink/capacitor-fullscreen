@@ -65,7 +65,7 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
         print("keyboardDidHide");
         keyboardVisible = false
         keyboardInsets.bottom = 0
-        notifyListeners("keyboardshow", data: sendInsets(keyboardInsets));
+        notifyListeners("keyboardhide", data: sendInsets(keyboardInsets));
         notifyInsets("keyboard", insets: keyboardInsets)
     }
     
