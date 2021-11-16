@@ -16,7 +16,7 @@ FullScreen.getKeyboardInsets().then(insets => {
 
 // Event: "insetschange"
 FullScreen.addListener('insets', event => {
-  console.log(`insets ${event.type}: (${event.insets})`);
+  console.log(`[insets] ${event.type}: ${JSON.stringify(event.insets)}`);
   if (InsetsType.SafeArea === event.type) {
     updateSafeAreaInsets(event.insets);
   } else if (InsetsType.Keyboard === event.type) {
