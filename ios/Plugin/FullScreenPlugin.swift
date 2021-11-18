@@ -8,20 +8,20 @@ import Capacitor
 @objc(FullScreenPlugin)
 public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
     
+    static var homeIndicatorHidden = false
+    
     private var safeAreaInsets: UIEdgeInsets = UIEdgeInsets.zero
     
     private var keyboardInsets: UIEdgeInsets = UIEdgeInsets.zero
     
     private var keyboardVisible = false
     
-    private var accessoryBarDisabled = false
-    
-    static var homeIndicatorHidden = false
        
     override public func load() {
         CAPLog.print("Loading FullScreenPlugin...")
         super.load()
         initKeyboard();
+        
     }
     
     func viewSafeAreaInsetsDidChange() {
@@ -58,11 +58,8 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
             notifyListeners("keyboardshow", data: sendInsets(keyboardInsets));
             notifyInsets("keyboard", insets: keyboardInsets)
         }
-        if accessoryBarDisabled {
-            bridge?.webView?.inputAccessoryView?.removeFromSuperview()
-        }
     }
-    
+    	
     @objc private func keyboardDidHide(notification: Notification) {
         print("keyboardDidHide");
         keyboardVisible = false
@@ -204,12 +201,7 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
         if enabled == nil {
             call.reject("Parameter \"enabled\" is required.");
         }
-        accessoryBarDisabled = !(enabled!)
-        if accessoryBarDisabled {
-            DispatchQueue.main.async {
-                self.bridge?.webView?.inputAccessoryView?.removeFromSuperview()
-            }
-        }
+        bridge?.webView?.disableInputAccessoryView(!enabled!)
         call.resolve();
     }
     
@@ -246,9 +238,66 @@ extension CAPBridgeViewController {
             plugin.viewSafeAreaInsetsDidChange()
         }
     }
-    
+
     override public var prefersHomeIndicatorAutoHidden:Bool {
         return FullScreenPlugin.homeIndicatorHidden
     }
     
 }
+
+extension WKWebView {
+    
+    struct inputAccessoryViewState {
+        static var disabled: Bool? = false
+    }
+    
+    @objc var inputAccessoryViewAlt: UIView? {
+        return nil
+    }
+    
+    @objc func disableInputAccessoryView(_ disabled: Bool) {
+        let selfClass: AnyClass! = object_getClass(self)
+        if disabled != inputAccessoryViewState.disabled,
+                let currMethod = class_getInstanceMethod(selfClass, #selector(getter: inputAccessoryView)),
+                let backMethod = class_getInstanceMethod(selfClass, #selector(getter: inputAccessoryViewAlt)) {
+            method_exchangeImplementations(currMethod, backMethod)
+            inputAccessoryViewState.disabled = disabled
+        }
+    }
+    
+}
+
+
+
+//
+//fileprivate final class InputAccessoryHackHelper: NSObject {
+//    @objc var inputAccessoryView: AnyObject? { return nil }
+//}
+//
+//extension WKWebView {
+//    func hack_removeInputAccessory() {
+//        guard let target = scrollView.subviews.first(where: {
+//            String(describing: type(of: $0)).hasPrefix("WKContent")
+//        }), let superclass = target.superclass else {
+//            return
+//        }
+//
+//        let noInputAccessoryViewClassName = "\(superclass)_NoInputAccessoryView"
+//        var newClass: AnyClass? = NSClassFromString(noInputAccessoryViewClassName)
+//
+//        if newClass == nil, let targetClass = object_getClass(target), let classNameCString = noInputAccessoryViewClassName.cString(using: .ascii) {
+//            newClass = objc_allocateClassPair(targetClass, classNameCString, 0)
+//
+//            if let newClass = newClass {
+//                objc_registerClassPair(newClass)
+//            }
+//        }
+//
+//        guard let noInputAccessoryClass = newClass, let originalMethod = class_getInstanceMethod(InputAccessoryHackHelper.self, #selector(getter: InputAccessoryHackHelper.inputAccessoryView)) else {
+//            return
+//        }
+//        class_addMethod(noInputAccessoryClass.self, #selector(getter: InputAccessoryHackHelper.inputAccessoryView), method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod))
+//        object_setClass(target, noInputAccessoryClass)
+//    }
+//}
+//
