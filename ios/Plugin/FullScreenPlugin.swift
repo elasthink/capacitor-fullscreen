@@ -15,6 +15,8 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
     private var keyboardVisible = false
     
     private var accessoryBarDisabled = false
+    
+    static var homeIndicatorHidden = false
        
     override public func load() {
         CAPLog.print("Loading FullScreenPlugin...")
@@ -65,7 +67,7 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
         print("keyboardDidHide");
         keyboardVisible = false
         keyboardInsets.bottom = 0
-        notifyListeners("keyboardshow", data: sendInsets(keyboardInsets));
+        notifyListeners("keyboardhide", data: sendInsets(keyboardInsets));
         notifyInsets("keyboard", insets: keyboardInsets)
     }
     
@@ -116,11 +118,18 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
     }
     
     @objc func setStatusBarColor(_ call: CAPPluginCall) {
-        call.unimplemented("Not yet implemented!")
+        call.unimplemented("Not implemented on iOS")
     }
     
     @objc func setStatusBarStyle(_ call: CAPPluginCall) {
-        call.unimplemented("Not yet implemented!")
+        let style = call.getString("style")
+        if #available(iOS 13.0, *), style == "light" {
+            bridge?.statusBarStyle = .darkContent
+        } else if style == "dark" {
+            bridge?.statusBarStyle = .lightContent
+        } else {
+            bridge?.statusBarStyle = .default
+        }
     }
     
     @objc func isStatusBarVisible(_ call: CAPPluginCall) {
@@ -129,30 +138,31 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
                 "visible": visible
             ]);
         } else {
-            call.reject("Unable to check if the status bar is visible or not.")
+            call.reject("Unable to check visibility of the status bar.")
         }
     }
     
     
-    /* NAVIGATION-BAR
+    /* NAVIGATION-BAR (Home Indicator on on iOS)
      * ============================================================================================================== */
+    // More info:
+    // https://medium.com/@nathangitter/reverse-engineering-the-iphone-x-home-indicator-color-a4c112f84d34
+    // https://programmingwithswift.com/hide-home-indicator-with-swift/
     
     @objc func showNavigationBar(_ call: CAPPluginCall) {
-        if let controller = bridge?.viewController?.navigationController {
-            controller.setNavigationBarHidden(true, animated: true)
-            call.resolve()
-        } else {
-            call.reject("Unable to show navigation bar")
+        FullScreenPlugin.homeIndicatorHidden = false
+        DispatchQueue.main.async {
+            self.bridge?.viewController!.setNeedsUpdateOfHomeIndicatorAutoHidden()
         }
+        call.resolve()
     }
     
     @objc func hideNavigationBar(_ call: CAPPluginCall) {
-        if let controller = bridge?.viewController?.navigationController {
-            controller.setNavigationBarHidden(false, animated: true)
-            call.resolve()
-        } else {
-            call.reject("Unable to hide navigation bar")
+        FullScreenPlugin.homeIndicatorHidden = true
+        DispatchQueue.main.async {
+            self.bridge?.viewController!.setNeedsUpdateOfHomeIndicatorAutoHidden()
         }
+        call.resolve()
     }
     
     @objc func setNavigationBarColor(_ call: CAPPluginCall) {
@@ -230,10 +240,15 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
 extension CAPBridgeViewController {
     
     override public func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange();
+        super.viewSafeAreaInsetsDidChange()
+        // TODO: Revisar la localización del plugin, ¿podemos fiarnos de que el nombre siempre va a ser "FullScreen"?
         if let plugin = bridge?.plugin(withName: "FullScreen") as? FullScreenPlugin {
-            plugin.viewSafeAreaInsetsDidChange();
+            plugin.viewSafeAreaInsetsDidChange()
         }
+    }
+    
+    override public var prefersHomeIndicatorAutoHidden:Bool {
+        return FullScreenPlugin.homeIndicatorHidden
     }
     
 }
