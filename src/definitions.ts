@@ -1,6 +1,7 @@
 export enum Style {
   Dark = 'dark',
-  Light = 'light'
+  Light = 'light',
+  Default = 'default'
 }
 
 export enum InsetsType {

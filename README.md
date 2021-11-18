@@ -347,10 +347,11 @@ addListener(eventName: 'keyboardhide', listener: () => void) => any
 
 #### Style
 
-| Members     | Value                |
-| ----------- | -------------------- |
-| **`Dark`**  | <code>'dark'</code>  |
-| **`Light`** | <code>'light'</code> |
+| Members       | Value                  |
+| ------------- | ---------------------- |
+| **`Dark`**    | <code>'dark'</code>    |
+| **`Light`**   | <code>'light'</code>   |
+| **`Default`** | <code>'default'</code> |
 
 
 #### InsetsType
