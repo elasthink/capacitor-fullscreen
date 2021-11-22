@@ -33,7 +33,7 @@ export interface ToggleOptions {
   enabled: boolean
 }
 
-export interface FullScreenPlugin {
+export interface FullScreenPlugin extends Plugin {
 
   /* SAFE-AREA
    * ================================================================================================================ */
