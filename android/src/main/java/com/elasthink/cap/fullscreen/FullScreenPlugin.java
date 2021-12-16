@@ -73,7 +73,8 @@ public class FullScreenPlugin extends Plugin {
             return WindowInsetsCompat.CONSUMED;
         });
 
-        // TODO: Tomar colores por defecto por la configuración del plugin así como el estilo?
+        // TODO: Definir valores iniciales en configuración, aunque en el momento que añadimos el tratamiento del evento
+        //  anterior, no podemos cambiar el color de fondo de las barras, no sabemos porqué.
         window.setStatusBarColor(Color.TRANSPARENT);
         window.setNavigationBarColor(Color.TRANSPARENT);
     }
