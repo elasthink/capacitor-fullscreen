@@ -1,0 +1,460 @@
+{
+  "api": {
+    "name": "FullScreenPlugin",
+    "slug": "fullscreenplugin",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "getSafeAreaInsets",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "Insets"
+        ],
+        "slug": "getsafeareainsets"
+      },
+      {
+        "name": "showStatusBar",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "showstatusbar"
+      },
+      {
+        "name": "hideStatusBar",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "hidestatusbar"
+      },
+      {
+        "name": "setStatusBarColor",
+        "signature": "(options: ColorOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "ColorOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "ColorOptions"
+        ],
+        "slug": "setstatusbarcolor"
+      },
+      {
+        "name": "setStatusBarStyle",
+        "signature": "(options: StyleOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "StyleOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "StyleOptions"
+        ],
+        "slug": "setstatusbarstyle"
+      },
+      {
+        "name": "isStatusBarVisible",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "isstatusbarvisible"
+      },
+      {
+        "name": "showNavigationBar",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "shownavigationbar"
+      },
+      {
+        "name": "hideNavigationBar",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "hidenavigationbar"
+      },
+      {
+        "name": "setNavigationBarColor",
+        "signature": "(options: ColorOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "ColorOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "ColorOptions"
+        ],
+        "slug": "setnavigationbarcolor"
+      },
+      {
+        "name": "setNavigationBarStyle",
+        "signature": "(options: StyleOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "StyleOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "StyleOptions"
+        ],
+        "slug": "setnavigationbarstyle"
+      },
+      {
+        "name": "isNavigationBarVisible",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "isnavigationbarvisible"
+      },
+      {
+        "name": "showKeyboard",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "showkeyboard"
+      },
+      {
+        "name": "hideKeyboard",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "hidekeyboard"
+      },
+      {
+        "name": "isKeyboardVisible",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "iskeyboardvisible"
+      },
+      {
+        "name": "getKeyboardInsets",
+        "signature": "() => any",
+        "parameters": [],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "Insets"
+        ],
+        "slug": "getkeyboardinsets"
+      },
+      {
+        "name": "toggleAccessoryBar",
+        "signature": "(options: ToggleOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "ToggleOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "ToggleOptions"
+        ],
+        "slug": "toggleaccessorybar"
+      },
+      {
+        "name": "toggleScroll",
+        "signature": "(options: ToggleOptions) => any",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "ToggleOptions"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "ToggleOptions"
+        ],
+        "slug": "togglescroll"
+      },
+      {
+        "name": "addListener",
+        "signature": "(eventName: 'insets', listener: (event: InsetsEvent) => void) => any",
+        "parameters": [
+          {
+            "name": "eventName",
+            "docs": "",
+            "type": "\"insets\""
+          },
+          {
+            "name": "listener",
+            "docs": "",
+            "type": "(event: InsetsEvent) => void"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "InsetsEvent"
+        ],
+        "slug": "addlistener"
+      },
+      {
+        "name": "addListener",
+        "signature": "(eventName: 'keyboardshow', listener: (insets: Insets) => void) => any",
+        "parameters": [
+          {
+            "name": "eventName",
+            "docs": "",
+            "type": "\"keyboardshow\""
+          },
+          {
+            "name": "listener",
+            "docs": "",
+            "type": "(insets: Insets) => void"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "Insets"
+        ],
+        "slug": "addlistener"
+      },
+      {
+        "name": "addListener",
+        "signature": "(eventName: 'keyboardhide', listener: () => void) => any",
+        "parameters": [
+          {
+            "name": "eventName",
+            "docs": "",
+            "type": "\"keyboardhide\""
+          },
+          {
+            "name": "listener",
+            "docs": "",
+            "type": "() => void"
+          }
+        ],
+        "returns": "any",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "addlistener"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [
+    {
+      "name": "Insets",
+      "slug": "insets",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "top",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "right",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "bottom",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "left",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "name": "ColorOptions",
+      "slug": "coloroptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "color",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "StyleOptions",
+      "slug": "styleoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "style",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Style"
+          ],
+          "type": "Style"
+        }
+      ]
+    },
+    {
+      "name": "ToggleOptions",
+      "slug": "toggleoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "enabled",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "InsetsEvent",
+      "slug": "insetsevent",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "type",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "InsetsType"
+          ],
+          "type": "InsetsType"
+        },
+        {
+          "name": "insets",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Insets"
+          ],
+          "type": "Insets"
+        }
+      ]
+    }
+  ],
+  "enums": [
+    {
+      "name": "Style",
+      "slug": "style",
+      "members": [
+        {
+          "name": "Dark",
+          "value": "'dark'",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "Light",
+          "value": "'light'",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "Default",
+          "value": "'default'",
+          "tags": [],
+          "docs": ""
+        }
+      ]
+    },
+    {
+      "name": "InsetsType",
+      "slug": "insetstype",
+      "members": [
+        {
+          "name": "SafeArea",
+          "value": "\"safe-area\"",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "Keyboard",
+          "value": "\"keyboard\"",
+          "tags": [],
+          "docs": ""
+        }
+      ]
+    }
+  ]
+}
