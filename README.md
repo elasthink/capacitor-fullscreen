@@ -1,11 +1,11 @@
-# capacitor-fullscreen
+# capacitor-insets
 
-Capacitor plugin to control full screen mode on Android and iOS devices.
+Capacitor plugin to control insets on Android and iOS devices.
 
 ## Install
 
 ```bash
-npm install capacitor-fullscreen
+npm install capacitor-insets
 npx cap sync
 ```
 
