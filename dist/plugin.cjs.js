@@ -16,16 +16,16 @@ var InsetsType;
     InsetsType["Keyboard"] = "keyboard";
 })(InsetsType || (InsetsType = {}));
 
-const plugin = core.registerPlugin('Insets');
+const Insets = core.registerPlugin('Insets');
 // Init:
-plugin.getSafeAreaInsets().then(insets => {
+Insets.getSafeAreaInsets().then(insets => {
     updateSafeAreaInsets(insets);
 });
-plugin.getKeyboardInsets().then(insets => {
+Insets.getKeyboardInsets().then(insets => {
     updateKeyboardInsets(insets);
 });
 // Event: "insetschange"
-plugin.addListener('insets', event => {
+Insets.addListener('insets', event => {
     console.log(`[insets] ${event.type}: ${JSON.stringify(event.insets)}`);
     if (InsetsType.SafeArea === event.type) {
         updateSafeAreaInsets(event.insets);
@@ -48,5 +48,5 @@ function updateKeyboardInsets(insets) {
     style.setProperty(`--${prefix}-ins-bottom`, `${insets.bottom}px`);
 }
 
-exports.plugin = plugin;
+exports.Insets = Insets;
 //# sourceMappingURL=plugin.cjs.js.map

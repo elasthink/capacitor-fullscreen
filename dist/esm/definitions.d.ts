@@ -7,7 +7,7 @@ export declare enum InsetsType {
     SafeArea = "safe-area",
     Keyboard = "keyboard"
 }
-export interface Insets {
+export interface Rect {
     top: number;
     right: number;
     bottom: number;
@@ -15,7 +15,7 @@ export interface Insets {
 }
 export interface InsetsEvent {
     type: InsetsType;
-    insets: Insets;
+    insets: Rect;
 }
 export interface ColorOptions {
     color: string;
@@ -27,7 +27,7 @@ export interface ToggleOptions {
     enabled: boolean;
 }
 export interface InsetsPlugin extends Plugin {
-    getSafeAreaInsets(): Promise<Insets>;
+    getSafeAreaInsets(): Promise<Rect>;
     showStatusBar(): Promise<void>;
     hideStatusBar(): Promise<void>;
     setStatusBarColor(options: ColorOptions): Promise<void>;
@@ -41,10 +41,10 @@ export interface InsetsPlugin extends Plugin {
     showKeyboard(): Promise<void>;
     hideKeyboard(): Promise<void>;
     isKeyboardVisible(): Promise<boolean>;
-    getKeyboardInsets(): Promise<Insets>;
+    getKeyboardInsets(): Promise<Rect>;
     toggleAccessoryBar(options: ToggleOptions): Promise<void>;
     toggleScroll(options: ToggleOptions): Promise<void>;
     addListener(eventName: 'insets', listener: (event: InsetsEvent) => void): Promise<void>;
-    addListener(eventName: 'keyboardshow', listener: (insets: Insets) => void): Promise<void>;
+    addListener(eventName: 'keyboardshow', listener: (insets: Rect) => void): Promise<void>;
     addListener(eventName: 'keyboardhide', listener: () => void): Promise<void>;
 }

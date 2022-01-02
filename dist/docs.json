@@ -13,7 +13,7 @@
         "tags": [],
         "docs": "",
         "complexTypes": [
-          "Insets"
+          "Rect"
         ],
         "slug": "getsafeareainsets"
       },
@@ -187,7 +187,7 @@
         "tags": [],
         "docs": "",
         "complexTypes": [
-          "Insets"
+          "Rect"
         ],
         "slug": "getkeyboardinsets"
       },
@@ -252,7 +252,7 @@
       },
       {
         "name": "addListener",
-        "signature": "(eventName: 'keyboardshow', listener: (insets: Insets) => void) => any",
+        "signature": "(eventName: 'keyboardshow', listener: (insets: Rect) => void) => any",
         "parameters": [
           {
             "name": "eventName",
@@ -262,14 +262,14 @@
           {
             "name": "listener",
             "docs": "",
-            "type": "(insets: Insets) => void"
+            "type": "(insets: Rect) => void"
           }
         ],
         "returns": "any",
         "tags": [],
         "docs": "",
         "complexTypes": [
-          "Insets"
+          "Rect"
         ],
         "slug": "addlistener"
       },
@@ -299,8 +299,8 @@
   },
   "interfaces": [
     {
-      "name": "Insets",
-      "slug": "insets",
+      "name": "Rect",
+      "slug": "rect",
       "docs": "",
       "tags": [],
       "methods": [],
@@ -406,9 +406,9 @@
           "tags": [],
           "docs": "",
           "complexTypes": [
-            "Insets"
+            "Rect"
           ],
-          "type": "Insets"
+          "type": "Rect"
         }
       ]
     }

@@ -271,13 +271,13 @@ addListener(eventName: 'insets', listener: (event: InsetsEvent) => void) => any
 ### addListener(...)
 
 ```typescript
-addListener(eventName: 'keyboardshow', listener: (insets: Insets) => void) => any
+addListener(eventName: 'keyboardshow', listener: (insets: Rect) => void) => any
 ```
 
-| Param           | Type                                                           |
-| --------------- | -------------------------------------------------------------- |
-| **`eventName`** | <code>"keyboardshow"</code>                                    |
-| **`listener`**  | <code>(insets: <a href="#insets">Insets</a>) =&gt; void</code> |
+| Param           | Type                                                       |
+| --------------- | ---------------------------------------------------------- |
+| **`eventName`** | <code>"keyboardshow"</code>                                |
+| **`listener`**  | <code>(insets: <a href="#rect">Rect</a>) =&gt; void</code> |
 
 **Returns:** <code>any</code>
 
@@ -303,7 +303,7 @@ addListener(eventName: 'keyboardhide', listener: () => void) => any
 ### Interfaces
 
 
-#### Insets
+#### Rect
 
 | Prop         | Type                |
 | ------------ | ------------------- |
@@ -339,7 +339,7 @@ addListener(eventName: 'keyboardhide', listener: () => void) => any
 | Prop         | Type                                              |
 | ------------ | ------------------------------------------------- |
 | **`type`**   | <code><a href="#insetstype">InsetsType</a></code> |
-| **`insets`** | <code><a href="#insets">Insets</a></code>         |
+| **`insets`** | <code><a href="#rect">Rect</a></code>             |
 
 
 ### Enums

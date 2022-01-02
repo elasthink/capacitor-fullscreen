@@ -1,15 +1,15 @@
 import { registerPlugin } from '@capacitor/core';
 import { InsetsType } from './definitions';
-const plugin = registerPlugin('Insets');
+const Insets = registerPlugin('Insets');
 // Init:
-plugin.getSafeAreaInsets().then(insets => {
+Insets.getSafeAreaInsets().then(insets => {
     updateSafeAreaInsets(insets);
 });
-plugin.getKeyboardInsets().then(insets => {
+Insets.getKeyboardInsets().then(insets => {
     updateKeyboardInsets(insets);
 });
 // Event: "insetschange"
-plugin.addListener('insets', event => {
+Insets.addListener('insets', event => {
     console.log(`[insets] ${event.type}: ${JSON.stringify(event.insets)}`);
     if (InsetsType.SafeArea === event.type) {
         updateSafeAreaInsets(event.insets);
@@ -31,5 +31,5 @@ function updateKeyboardInsets(insets) {
     const style = document.documentElement.style;
     style.setProperty(`--${prefix}-ins-bottom`, `${insets.bottom}px`);
 }
-export { plugin };
+export { Insets };
 //# sourceMappingURL=index.js.map
