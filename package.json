@@ -1,7 +1,7 @@
 {
-  "name": "capacitor-fullscreen",
+  "name": "capacitor-insets",
   "version": "0.0.1",
-  "description": "Capacitor plugin to control full screen mode on Android and iOS devices.",
+  "description": "Capacitor plugin to control insets on Android and iOS devices.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -11,16 +11,16 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapacitorFullscreen.podspec"
+    "CapacitorInsets.podspec"
   ],
   "author": "terangel",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/elasthink/capacitor-fullscreen.git"
+    "url": "git+https://github.com/elasthink/capacitor-insets.git"
   },
   "bugs": {
-    "url": "https://github.com/elasthink/capacitor-fullscreen/issues"
+    "url": "https://github.com/elasthink/capacitor-insets/issues"
   },
   "keywords": [
     "capacitor",
@@ -37,7 +37,7 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
-    "docgen": "docgen --api FullScreenPlugin --output-readme README.md --output-json dist/docs.json",
+    "docgen": "docgen --api InsetsPlugin --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",

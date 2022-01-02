@@ -1,4 +1,4 @@
-package com.elasthink.cap.fullscreen;
+package com.elasthink.cap.insets;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -22,10 +22,10 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.util.WebColor;
 
 
-@CapacitorPlugin(name = "FullScreen")
-public class FullScreenPlugin extends Plugin {
+@CapacitorPlugin(name = "Insets")
+public class InsetsPlugin extends Plugin {
 
-    private static final String TAG = "FullScreen";
+    private static final String TAG = "Insets";
 
     private static final String TYPE_SAFE_AREA = "safe-area";
     private static final String TYPE_KEYBOARD  = "keyboard";

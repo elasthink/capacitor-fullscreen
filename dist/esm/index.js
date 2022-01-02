@@ -1,15 +1,15 @@
 import { registerPlugin } from '@capacitor/core';
 import { InsetsType } from './definitions';
-const FullScreen = registerPlugin('FullScreen');
+const plugin = registerPlugin('Insets');
 // Init:
-FullScreen.getSafeAreaInsets().then(insets => {
+plugin.getSafeAreaInsets().then(insets => {
     updateSafeAreaInsets(insets);
 });
-FullScreen.getKeyboardInsets().then(insets => {
+plugin.getKeyboardInsets().then(insets => {
     updateKeyboardInsets(insets);
 });
 // Event: "insetschange"
-FullScreen.addListener('insets', event => {
+plugin.addListener('insets', event => {
     console.log(`[insets] ${event.type}: ${JSON.stringify(event.insets)}`);
     if (InsetsType.SafeArea === event.type) {
         updateSafeAreaInsets(event.insets);
@@ -31,5 +31,5 @@ function updateKeyboardInsets(insets) {
     const style = document.documentElement.style;
     style.setProperty(`--${prefix}-ins-bottom`, `${insets.bottom}px`);
 }
-export { FullScreen };
+export { plugin };
 //# sourceMappingURL=index.js.map

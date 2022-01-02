@@ -5,8 +5,8 @@ import Capacitor
  * Please read the Capacitor iOS Plugin Development Guide
  * here: https://capacitorjs.com/docs/plugins/ios
  */
-@objc(FullScreenPlugin)
-public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
+@objc(InsetsPlugin)
+public class InsetsPlugin: CAPPlugin, UIScrollViewDelegate {
     
     static var homeIndicatorHidden = false
     
@@ -18,7 +18,7 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
     
        
     override public func load() {
-        CAPLog.print("Loading FullScreenPlugin...")
+        CAPLog.print("Loading InsetsPlugin...")
         super.load()
         initKeyboard();
         
@@ -147,7 +147,7 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
     // https://programmingwithswift.com/hide-home-indicator-with-swift/
     
     @objc func showNavigationBar(_ call: CAPPluginCall) {
-        FullScreenPlugin.homeIndicatorHidden = false
+        InsetsPlugin.homeIndicatorHidden = false
         DispatchQueue.main.async {
             self.bridge?.viewController!.setNeedsUpdateOfHomeIndicatorAutoHidden()
         }
@@ -155,7 +155,7 @@ public class FullScreenPlugin: CAPPlugin, UIScrollViewDelegate {
     }
     
     @objc func hideNavigationBar(_ call: CAPPluginCall) {
-        FullScreenPlugin.homeIndicatorHidden = true
+        InsetsPlugin.homeIndicatorHidden = true
         DispatchQueue.main.async {
             self.bridge?.viewController!.setNeedsUpdateOfHomeIndicatorAutoHidden()
         }
@@ -233,14 +233,14 @@ extension CAPBridgeViewController {
     
     override public func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        // TODO: Revisar la localización del plugin, ¿podemos fiarnos de que el nombre siempre va a ser "FullScreen"?
-        if let plugin = bridge?.plugin(withName: "FullScreen") as? FullScreenPlugin {
+        // TODO: Revisar la localización del plugin, ¿podemos fiarnos de que el nombre siempre va a ser "Insets"?
+        if let plugin = bridge?.plugin(withName: "Insets") as? InsetsPlugin {
             plugin.viewSafeAreaInsetsDidChange()
         }
     }
 
     override public var prefersHomeIndicatorAutoHidden:Bool {
-        return FullScreenPlugin.homeIndicatorHidden
+        return InsetsPlugin.homeIndicatorHidden
     }
     
 }

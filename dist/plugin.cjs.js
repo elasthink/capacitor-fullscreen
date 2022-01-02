@@ -16,16 +16,16 @@ var InsetsType;
     InsetsType["Keyboard"] = "keyboard";
 })(InsetsType || (InsetsType = {}));
 
-const FullScreen = core.registerPlugin('FullScreen');
+const plugin = core.registerPlugin('Insets');
 // Init:
-FullScreen.getSafeAreaInsets().then(insets => {
+plugin.getSafeAreaInsets().then(insets => {
     updateSafeAreaInsets(insets);
 });
-FullScreen.getKeyboardInsets().then(insets => {
+plugin.getKeyboardInsets().then(insets => {
     updateKeyboardInsets(insets);
 });
 // Event: "insetschange"
-FullScreen.addListener('insets', event => {
+plugin.addListener('insets', event => {
     console.log(`[insets] ${event.type}: ${JSON.stringify(event.insets)}`);
     if (InsetsType.SafeArea === event.type) {
         updateSafeAreaInsets(event.insets);
@@ -48,5 +48,5 @@ function updateKeyboardInsets(insets) {
     style.setProperty(`--${prefix}-ins-bottom`, `${insets.bottom}px`);
 }
 
-exports.FullScreen = FullScreen;
+exports.plugin = plugin;
 //# sourceMappingURL=plugin.cjs.js.map

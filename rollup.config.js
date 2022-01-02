@@ -4,7 +4,7 @@ export default {
     {
       file: 'dist/plugin.js',
       format: 'iife',
-      name: 'capacitorFullScreen',
+      name: 'capacitorInsets',
       globals: {
         '@capacitor/core': 'capacitorExports',
       },

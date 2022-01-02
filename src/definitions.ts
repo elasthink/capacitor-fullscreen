@@ -9,7 +9,7 @@ export enum InsetsType {
   Keyboard = "keyboard"
 }
 
-export interface Insets {
+export interface Rect {
   top : number,
   right : number,
   bottom : number,
@@ -18,7 +18,7 @@ export interface Insets {
 
 export interface InsetsEvent {
   type: InsetsType,
-  insets: Insets
+  insets: Rect
 }
 
 export interface ColorOptions {
@@ -33,12 +33,12 @@ export interface ToggleOptions {
   enabled: boolean
 }
 
-export interface FullScreenPlugin extends Plugin {
+export interface InsetsPlugin extends Plugin {
 
   /* SAFE-AREA
    * ================================================================================================================ */
 
-  getSafeAreaInsets(): Promise<Insets>
+  getSafeAreaInsets(): Promise<Rect>
 
 
   /* STATUS-BAR
@@ -78,7 +78,7 @@ export interface FullScreenPlugin extends Plugin {
 
   isKeyboardVisible(): Promise<boolean>
 
-  getKeyboardInsets(): Promise<Insets>
+  getKeyboardInsets(): Promise<Rect>
 
   toggleAccessoryBar(options: ToggleOptions): Promise<void>
 
@@ -90,7 +90,7 @@ export interface FullScreenPlugin extends Plugin {
 
   addListener(eventName: 'insets', listener: (event: InsetsEvent) => void): Promise<void>
 
-  addListener(eventName: 'keyboardshow', listener: (insets: Insets) => void): Promise<void>
+  addListener(eventName: 'keyboardshow', listener: (insets: Rect) => void): Promise<void>
 
   addListener(eventName: 'keyboardhide', listener: () => void): Promise<void>
 

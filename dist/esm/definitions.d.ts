@@ -26,7 +26,7 @@ export interface StyleOptions {
 export interface ToggleOptions {
     enabled: boolean;
 }
-export interface FullScreenPlugin extends Plugin {
+export interface InsetsPlugin extends Plugin {
     getSafeAreaInsets(): Promise<Insets>;
     showStatusBar(): Promise<void>;
     hideStatusBar(): Promise<void>;

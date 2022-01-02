@@ -1,3 +1,3 @@
-import type { FullScreenPlugin } from './definitions';
-declare const FullScreen: FullScreenPlugin;
-export { FullScreen };
+import type { InsetsPlugin } from './definitions';
+declare const plugin: InsetsPlugin;
+export { plugin };

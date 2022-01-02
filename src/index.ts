@@ -1,21 +1,21 @@
 import { registerPlugin } from '@capacitor/core';
 
-import type { FullScreenPlugin, Insets } from './definitions';
+import type { InsetsPlugin, Rect } from './definitions';
 import { InsetsType } from './definitions';
 
-const FullScreen = registerPlugin<FullScreenPlugin>('FullScreen');
+const Insets = registerPlugin<InsetsPlugin>('Insets');
 
 // Init:
-FullScreen.getSafeAreaInsets().then(insets => {
+Insets.getSafeAreaInsets().then(insets => {
   updateSafeAreaInsets(insets);
 });
 
-FullScreen.getKeyboardInsets().then(insets => {
+Insets.getKeyboardInsets().then(insets => {
   updateKeyboardInsets(insets);
 });
 
 // Event: "insetschange"
-FullScreen.addListener('insets', event => {
+Insets.addListener('insets', event => {
   console.log(`[insets] ${event.type}: ${JSON.stringify(event.insets)}`);
   if (InsetsType.SafeArea === event.type) {
     updateSafeAreaInsets(event.insets);
@@ -24,7 +24,7 @@ FullScreen.addListener('insets', event => {
   }
 });
 
-function updateSafeAreaInsets(insets: Insets): void {
+function updateSafeAreaInsets(insets: Rect): void {
   const prefix = 'safe';
   const style = document.documentElement.style;
   style.setProperty(`--${prefix}-ins-top`, `${insets.top}px`);
@@ -33,10 +33,10 @@ function updateSafeAreaInsets(insets: Insets): void {
   style.setProperty(`--${prefix}-ins-left`, `${insets.left}px`);
 }
 
-function updateKeyboardInsets(insets: Insets): void {
+function updateKeyboardInsets(insets: Rect): void {
   const prefix = 'keyb';
   const style = document.documentElement.style;
   style.setProperty(`--${prefix}-ins-bottom`, `${insets.bottom}px`);
 }
 
-export { FullScreen };
+export { Insets };
