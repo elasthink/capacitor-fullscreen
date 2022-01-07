@@ -120,9 +120,9 @@ public class InsetsPlugin: CAPPlugin, UIScrollViewDelegate {
     
     @objc func setStatusBarStyle(_ call: CAPPluginCall) {
         let style = call.getString("style")
-        if #available(iOS 13.0, *), style == "dark" {
+        if #available(iOS 13.0, *), style == "light" {
             bridge?.statusBarStyle = .darkContent
-        } else if style == "light" {
+        } else if style == "dark" {
             bridge?.statusBarStyle = .lightContent
         } else {
             bridge?.statusBarStyle = .default
