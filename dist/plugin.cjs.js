@@ -16,24 +16,6 @@ var InsetsType;
     InsetsType["Keyboard"] = "keyboard";
 })(InsetsType || (InsetsType = {}));
 
-const Insets = core.registerPlugin('Insets');
-// Init:
-Insets.getSafeAreaInsets().then(insets => {
-    updateSafeAreaInsets(insets);
-});
-Insets.getKeyboardInsets().then(insets => {
-    updateKeyboardInsets(insets);
-});
-// Event: "insetschange"
-Insets.addListener('insets', event => {
-    console.log(`[insets] ${event.type}: ${JSON.stringify(event.insets)}`);
-    if (InsetsType.SafeArea === event.type) {
-        updateSafeAreaInsets(event.insets);
-    }
-    else if (InsetsType.Keyboard === event.type) {
-        updateKeyboardInsets(event.insets);
-    }
-});
 function updateSafeAreaInsets(insets) {
     const prefix = 'safe';
     const style = document.documentElement.style;
@@ -46,6 +28,26 @@ function updateKeyboardInsets(insets) {
     const prefix = 'keyb';
     const style = document.documentElement.style;
     style.setProperty(`--${prefix}-ins-bottom`, `${insets.bottom}px`);
+}
+const Insets = core.registerPlugin('Insets');
+// Init:
+if (core.Capacitor.isPluginAvailable('Insets')) {
+    Insets.getSafeAreaInsets().then(insets => {
+        updateSafeAreaInsets(insets);
+    }, err => console.error(err));
+    Insets.getKeyboardInsets().then(insets => {
+        updateKeyboardInsets(insets);
+    }, err => console.error(err));
+    // Event: "insetschange"
+    Insets.addListener('insets', event => {
+        console.log(`[insets] ${event.type}: ${JSON.stringify(event.insets)}`);
+        if (InsetsType.SafeArea === event.type) {
+            updateSafeAreaInsets(event.insets);
+        }
+        else if (InsetsType.Keyboard === event.type) {
+            updateKeyboardInsets(event.insets);
+        }
+    }).catch(err => console.error(err));
 }
 
 exports.Insets = Insets;
