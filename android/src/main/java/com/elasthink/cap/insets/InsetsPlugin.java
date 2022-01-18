@@ -31,7 +31,7 @@ public class InsetsPlugin extends Plugin {
     private static final String TYPE_KEYBOARD  = "keyboard";
 
     private static final String STYLE_LIGHT = "light";
-    private static final String STYLE_DARK  = "dark";
+    // private static final String STYLE_DARK  = "dark";
 
     private boolean statusBarVisible = true;
 
@@ -67,10 +67,20 @@ public class InsetsPlugin extends Plugin {
 
             final boolean visible = windowInsets.isVisible(WindowInsetsCompat.Type.ime());
             if (keyboardVisible != visible) {
+                if (!visible) {
+                    // NOTE: Cuando se oculta el teclado nos aseguramos que las barras de estado y navegación recuperan
+                    // el estado en el que se encontraban previamente.
+                    if (!statusBarVisible) {
+                        _hideStatusBar();
+                    }
+                    if (!navigationBarVisible) {
+                        _hideNavigationBar();
+                    }
+                }
                 notifyListeners(visible ? "keyboardshow" : "keyboardhide", insetsToJSObject(keyboardInsets));
                 keyboardVisible = visible;
             }
-            return WindowInsetsCompat.CONSUMED;
+            return windowInsets; // WindowInsetsCompat.CONSUMED?
         });
 
         // TODO: Definir valores iniciales en configuración, aunque en el momento que añadimos el tratamiento del evento
@@ -78,6 +88,7 @@ public class InsetsPlugin extends Plugin {
         window.setStatusBarColor(Color.TRANSPARENT);
         window.setNavigationBarColor(Color.TRANSPARENT);
     }
+
 
     /* SAFE-AREA
      * ============================================================================================================== */
@@ -100,11 +111,15 @@ public class InsetsPlugin extends Plugin {
 
     @PluginMethod
     public void hideStatusBar(PluginCall call) {
+        _hideStatusBar();
+        statusBarVisible = false;
+    }
+
+    private void _hideStatusBar() {
         bridge.executeOnMainThread(() -> {
             WindowInsetsControllerCompat controller = getController();
             controller.hide(WindowInsetsCompat.Type.statusBars());
         });
-        statusBarVisible = false;
     }
 
     @PluginMethod
@@ -142,7 +157,7 @@ public class InsetsPlugin extends Plugin {
     public void isStatusBarVisible(PluginCall call) {
         JSObject data = new JSObject();
         data.put("visible", statusBarVisible);
-        // NOT WORKING!
+        // NOTE: No funciona en algunos dispositivos, por eso necesitamos el flag "statusBarVisible".
         // data.put("visible", getWindowInsets().isVisible(WindowInsetsCompat.Type.statusBars()));
         call.resolve(data);
     }
@@ -161,11 +176,15 @@ public class InsetsPlugin extends Plugin {
 
     @PluginMethod
     public void hideNavigationBar(PluginCall call) {
+        _hideNavigationBar();
+        navigationBarVisible = false;
+    }
+
+    private void _hideNavigationBar() {
         bridge.executeOnMainThread(() -> {
             WindowInsetsControllerCompat controller = getController();
             controller.hide(WindowInsetsCompat.Type.navigationBars());
         });
-        navigationBarVisible = false;
     }
 
     @PluginMethod
@@ -203,7 +222,7 @@ public class InsetsPlugin extends Plugin {
     public void isNavigationBarVisible(PluginCall call) {
         JSObject data = new JSObject();
         data.put("visible", navigationBarVisible);
-        // NOT WORKING!
+        // NOTE: No funciona en algunos dispositivos, por eso necesitamos el flag "navigationBarVisible".
         // data.put("visible", getWindowInsets().isVisible(WindowInsetsCompat.Type.navigationBars()));
         call.resolve(data);
     }
@@ -290,9 +309,7 @@ public class InsetsPlugin extends Plugin {
     }
 
     private WindowInsetsCompat getWindowInsets() {
-        Activity activity = bridge.getActivity();
-        View decorView = activity.getWindow().getDecorView();
-        return WindowInsetsCompat.toWindowInsetsCompat(decorView.getRootWindowInsets());
+        return WindowInsetsCompat.toWindowInsetsCompat(bridge.getWebView().getRootWindowInsets());
     }
 
     private WindowInsetsControllerCompat getController() {

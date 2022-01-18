@@ -13,6 +13,10 @@ var capacitorInsets = (function (exports, core) {
         InsetsType["Keyboard"] = "keyboard";
     })(InsetsType || (InsetsType = {}));
 
+    /**
+     * Update safe area insets CSS variables.
+     * @param {Rect} insets
+     */
     function updateSafeAreaInsets(insets) {
         const prefix = 'safe';
         const style = document.documentElement.style;
@@ -21,21 +25,27 @@ var capacitorInsets = (function (exports, core) {
         style.setProperty(`--${prefix}-ins-bottom`, `${insets.bottom}px`);
         style.setProperty(`--${prefix}-ins-left`, `${insets.left}px`);
     }
+    /**
+     * Update keyboard insets CSS variables.
+     * @param {Rect} insets
+     */
     function updateKeyboardInsets(insets) {
         const prefix = 'keyb';
         const style = document.documentElement.style;
         style.setProperty(`--${prefix}-ins-bottom`, `${insets.bottom}px`);
     }
+    // Plugin registration.
     const Insets = core.registerPlugin('Insets');
-    // Init:
-    if (core.Capacitor.isPluginAvailable('Insets')) {
+    if (core.Capacitor.getPlatform() !== 'web') {
+        // Get safe area insets at the start.
         Insets.getSafeAreaInsets().then(insets => {
             updateSafeAreaInsets(insets);
         }, err => console.error(err));
+        // Get keyboard insets at the start.
         Insets.getKeyboardInsets().then(insets => {
             updateKeyboardInsets(insets);
         }, err => console.error(err));
-        // Event: "insetschange"
+        // "insetschange" event.
         Insets.addListener('insets', event => {
             console.log(`[insets] ${event.type}: ${JSON.stringify(event.insets)}`);
             if (InsetsType.SafeArea === event.type) {
