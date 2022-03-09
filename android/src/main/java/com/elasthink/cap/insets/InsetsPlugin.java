@@ -102,11 +102,15 @@ public class InsetsPlugin extends Plugin {
      * ============================================================================================================== */
     @PluginMethod
     public void showStatusBar(PluginCall call) {
+        _showStatusBar();
+        statusBarVisible = true;
+    }
+
+    private void _showStatusBar() {
         bridge.executeOnMainThread(() -> {
             WindowInsetsControllerCompat controller = getController();
             controller.show(WindowInsetsCompat.Type.statusBars());
         });
-        statusBarVisible = true;
     }
 
     @PluginMethod
@@ -272,7 +276,9 @@ public class InsetsPlugin extends Plugin {
 
     private Insets computeSafeAreaInsets(WindowInsetsCompat windowInsets) {
         Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout());
-        if (statusBarVisible) {
+        if (statusBarVisible || Build.VERSION.SDK_INT < Build.VERSION_CODES.P && keyboardVisible) {
+            // NOTE: Para versiones inferiores a Android 9 (28) asumimos que mientras se visualice el teclado en
+            // pantalla siempre se visualiza la barra de estado.
             // NOT WORKING! windowInsets.isVisible(WindowInsetsCompat.Type.statusBars())
             insets = Insets.max(insets, windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()));
         }
