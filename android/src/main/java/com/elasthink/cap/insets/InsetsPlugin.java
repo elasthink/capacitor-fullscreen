@@ -62,8 +62,16 @@ public class InsetsPlugin extends Plugin {
 
         ViewCompat.setOnApplyWindowInsetsListener(decorView, (view, windowInsets) -> {
             Logger.debug(TAG, "onApplyWindowInsetsListener()");
-            notifyInsets(TYPE_SAFE_AREA, safeAreaInsets = computeSafeAreaInsets(windowInsets));
-            notifyInsets(TYPE_KEYBOARD, keyboardInsets = computeKeyboardInsets(windowInsets));
+
+            Insets ins;
+            ins = computeSafeAreaInsets(windowInsets);
+            if (!ins.equals(safeAreaInsets)) {
+                notifyInsets(TYPE_SAFE_AREA, safeAreaInsets = ins);
+            }
+            ins = computeKeyboardInsets(windowInsets);
+            if (!ins.equals(keyboardInsets)) {
+                notifyInsets(TYPE_KEYBOARD, keyboardInsets = ins);
+            }
 
             final boolean visible = windowInsets.isVisible(WindowInsetsCompat.Type.ime());
             if (keyboardVisible != visible) {
