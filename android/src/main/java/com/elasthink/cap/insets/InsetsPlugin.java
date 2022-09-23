@@ -31,7 +31,6 @@ public class InsetsPlugin extends Plugin {
     private static final String TYPE_KEYBOARD  = "keyboard";
 
     private static final String STYLE_LIGHT = "light";
-    // private static final String STYLE_DARK  = "dark";
 
     private boolean statusBarVisible = true;
 
