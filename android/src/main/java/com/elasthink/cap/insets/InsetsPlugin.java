@@ -90,11 +90,6 @@ public class InsetsPlugin extends Plugin {
             }
             return windowInsets; // WindowInsetsCompat.CONSUMED?
         });
-
-        // TODO: Definir valores iniciales en configuración, aunque en el momento que añadimos el tratamiento del evento
-        //  anterior, no podemos cambiar el color de fondo de las barras, no sabemos porqué.
-        window.setStatusBarColor(Color.TRANSPARENT);
-        window.setNavigationBarColor(Color.TRANSPARENT);
     }
 
 
