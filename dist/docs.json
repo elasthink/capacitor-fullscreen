@@ -7,9 +7,9 @@
     "methods": [
       {
         "name": "getSafeAreaInsets",
-        "signature": "() => any",
+        "signature": "() => Promise<Rect>",
         "parameters": [],
-        "returns": "any",
+        "returns": "Promise<Rect>",
         "tags": [],
         "docs": "",
         "complexTypes": [
@@ -19,9 +19,9 @@
       },
       {
         "name": "showStatusBar",
-        "signature": "() => any",
+        "signature": "() => Promise<void>",
         "parameters": [],
-        "returns": "any",
+        "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -29,9 +29,9 @@
       },
       {
         "name": "hideStatusBar",
-        "signature": "() => any",
+        "signature": "() => Promise<void>",
         "parameters": [],
-        "returns": "any",
+        "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -39,7 +39,7 @@
       },
       {
         "name": "setStatusBarColor",
-        "signature": "(options: ColorOptions) => any",
+        "signature": "(options: ColorOptions) => Promise<void>",
         "parameters": [
           {
             "name": "options",
@@ -47,7 +47,7 @@
             "type": "ColorOptions"
           }
         ],
-        "returns": "any",
+        "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [
@@ -57,7 +57,7 @@
       },
       {
         "name": "setStatusBarStyle",
-        "signature": "(options: StyleOptions) => any",
+        "signature": "(options: StyleOptions) => Promise<void>",
         "parameters": [
           {
             "name": "options",
@@ -65,7 +65,7 @@
             "type": "StyleOptions"
           }
         ],
-        "returns": "any",
+        "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [
@@ -75,9 +75,9 @@
       },
       {
         "name": "isStatusBarVisible",
-        "signature": "() => any",
+        "signature": "() => Promise<boolean>",
         "parameters": [],
-        "returns": "any",
+        "returns": "Promise<boolean>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -85,9 +85,9 @@
       },
       {
         "name": "showNavigationBar",
-        "signature": "() => any",
+        "signature": "() => Promise<void>",
         "parameters": [],
-        "returns": "any",
+        "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -95,9 +95,9 @@
       },
       {
         "name": "hideNavigationBar",
-        "signature": "() => any",
+        "signature": "() => Promise<void>",
         "parameters": [],
-        "returns": "any",
+        "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -105,7 +105,7 @@
       },
       {
         "name": "setNavigationBarColor",
-        "signature": "(options: ColorOptions) => any",
+        "signature": "(options: ColorOptions) => Promise<void>",
         "parameters": [
           {
             "name": "options",
@@ -113,7 +113,7 @@
             "type": "ColorOptions"
           }
         ],
-        "returns": "any",
+        "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [
@@ -123,7 +123,7 @@
       },
       {
         "name": "setNavigationBarStyle",
-        "signature": "(options: StyleOptions) => any",
+        "signature": "(options: StyleOptions) => Promise<void>",
         "parameters": [
           {
             "name": "options",
@@ -131,7 +131,7 @@
             "type": "StyleOptions"
           }
         ],
-        "returns": "any",
+        "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [
@@ -141,9 +141,9 @@
       },
       {
         "name": "isNavigationBarVisible",
-        "signature": "() => any",
+        "signature": "() => Promise<boolean>",
         "parameters": [],
-        "returns": "any",
+        "returns": "Promise<boolean>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -151,9 +151,9 @@
       },
       {
         "name": "showKeyboard",
-        "signature": "() => any",
+        "signature": "() => Promise<void>",
         "parameters": [],
-        "returns": "any",
+        "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -161,9 +161,9 @@
       },
       {
         "name": "hideKeyboard",
-        "signature": "() => any",
+        "signature": "() => Promise<void>",
         "parameters": [],
-        "returns": "any",
+        "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -171,9 +171,9 @@
       },
       {
         "name": "isKeyboardVisible",
-        "signature": "() => any",
+        "signature": "() => Promise<boolean>",
         "parameters": [],
-        "returns": "any",
+        "returns": "Promise<boolean>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -181,9 +181,9 @@
       },
       {
         "name": "getKeyboardInsets",
-        "signature": "() => any",
+        "signature": "() => Promise<Rect>",
         "parameters": [],
-        "returns": "any",
+        "returns": "Promise<Rect>",
         "tags": [],
         "docs": "",
         "complexTypes": [
@@ -193,7 +193,7 @@
       },
       {
         "name": "toggleAccessoryBar",
-        "signature": "(options: ToggleOptions) => any",
+        "signature": "(options: ToggleOptions) => Promise<void>",
         "parameters": [
           {
             "name": "options",
@@ -201,7 +201,7 @@
             "type": "ToggleOptions"
           }
         ],
-        "returns": "any",
+        "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [
@@ -211,7 +211,7 @@
       },
       {
         "name": "toggleScroll",
-        "signature": "(options: ToggleOptions) => any",
+        "signature": "(options: ToggleOptions) => Promise<void>",
         "parameters": [
           {
             "name": "options",
@@ -219,7 +219,7 @@
             "type": "ToggleOptions"
           }
         ],
-        "returns": "any",
+        "returns": "Promise<void>",
         "tags": [],
         "docs": "",
         "complexTypes": [
@@ -229,12 +229,12 @@
       },
       {
         "name": "addListener",
-        "signature": "(eventName: 'insets', listener: (event: InsetsEvent) => void) => any",
+        "signature": "(eventName: 'insets', listener: (event: InsetsEvent) => void) => Promise<PluginListenerHandle>",
         "parameters": [
           {
             "name": "eventName",
             "docs": "",
-            "type": "\"insets\""
+            "type": "'insets'"
           },
           {
             "name": "listener",
@@ -242,22 +242,23 @@
             "type": "(event: InsetsEvent) => void"
           }
         ],
-        "returns": "any",
+        "returns": "Promise<PluginListenerHandle>",
         "tags": [],
         "docs": "",
         "complexTypes": [
+          "PluginListenerHandle",
           "InsetsEvent"
         ],
-        "slug": "addlistener"
+        "slug": "addlistenerinsets-"
       },
       {
         "name": "addListener",
-        "signature": "(eventName: 'keyboardshow', listener: (insets: Rect) => void) => any",
+        "signature": "(eventName: 'keyboardshow', listener: (insets: Rect) => void) => Promise<PluginListenerHandle>",
         "parameters": [
           {
             "name": "eventName",
             "docs": "",
-            "type": "\"keyboardshow\""
+            "type": "'keyboardshow'"
           },
           {
             "name": "listener",
@@ -265,22 +266,23 @@
             "type": "(insets: Rect) => void"
           }
         ],
-        "returns": "any",
+        "returns": "Promise<PluginListenerHandle>",
         "tags": [],
         "docs": "",
         "complexTypes": [
+          "PluginListenerHandle",
           "Rect"
         ],
-        "slug": "addlistener"
+        "slug": "addlistenerkeyboardshow-"
       },
       {
         "name": "addListener",
-        "signature": "(eventName: 'keyboardhide', listener: () => void) => any",
+        "signature": "(eventName: 'keyboardhide', listener: () => void) => Promise<PluginListenerHandle>",
         "parameters": [
           {
             "name": "eventName",
             "docs": "",
-            "type": "\"keyboardhide\""
+            "type": "'keyboardhide'"
           },
           {
             "name": "listener",
@@ -288,11 +290,13 @@
             "type": "() => void"
           }
         ],
-        "returns": "any",
+        "returns": "Promise<PluginListenerHandle>",
         "tags": [],
         "docs": "",
-        "complexTypes": [],
-        "slug": "addlistener"
+        "complexTypes": [
+          "PluginListenerHandle"
+        ],
+        "slug": "addlistenerkeyboardhide-"
       }
     ],
     "properties": []
@@ -386,6 +390,22 @@
       ]
     },
     {
+      "name": "PluginListenerHandle",
+      "slug": "pluginlistenerhandle",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "remove",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "() => Promise<void>"
+        }
+      ]
+    },
+    {
       "name": "InsetsEvent",
       "slug": "insetsevent",
       "docs": "",
@@ -456,5 +476,7 @@
         }
       ]
     }
-  ]
+  ],
+  "typeAliases": [],
+  "pluginConfigs": []
 }

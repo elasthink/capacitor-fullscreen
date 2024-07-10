@@ -30,9 +30,9 @@ npx cap sync
 * [`getKeyboardInsets()`](#getkeyboardinsets)
 * [`toggleAccessoryBar(...)`](#toggleaccessorybar)
 * [`toggleScroll(...)`](#togglescroll)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
-* [`addListener(...)`](#addlistener)
+* [`addListener('insets', ...)`](#addlistenerinsets-)
+* [`addListener('keyboardshow', ...)`](#addlistenerkeyboardshow-)
+* [`addListener('keyboardhide', ...)`](#addlistenerkeyboardhide-)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
 
@@ -44,10 +44,10 @@ npx cap sync
 ### getSafeAreaInsets()
 
 ```typescript
-getSafeAreaInsets() => any
+getSafeAreaInsets() => Promise<Rect>
 ```
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;<a href="#rect">Rect</a>&gt;</code>
 
 --------------------
 
@@ -55,10 +55,8 @@ getSafeAreaInsets() => any
 ### showStatusBar()
 
 ```typescript
-showStatusBar() => any
+showStatusBar() => Promise<void>
 ```
-
-**Returns:** <code>any</code>
 
 --------------------
 
@@ -66,10 +64,8 @@ showStatusBar() => any
 ### hideStatusBar()
 
 ```typescript
-hideStatusBar() => any
+hideStatusBar() => Promise<void>
 ```
-
-**Returns:** <code>any</code>
 
 --------------------
 
@@ -77,14 +73,12 @@ hideStatusBar() => any
 ### setStatusBarColor(...)
 
 ```typescript
-setStatusBarColor(options: ColorOptions) => any
+setStatusBarColor(options: ColorOptions) => Promise<void>
 ```
 
 | Param         | Type                                                  |
 | ------------- | ----------------------------------------------------- |
 | **`options`** | <code><a href="#coloroptions">ColorOptions</a></code> |
-
-**Returns:** <code>any</code>
 
 --------------------
 
@@ -92,14 +86,12 @@ setStatusBarColor(options: ColorOptions) => any
 ### setStatusBarStyle(...)
 
 ```typescript
-setStatusBarStyle(options: StyleOptions) => any
+setStatusBarStyle(options: StyleOptions) => Promise<void>
 ```
 
 | Param         | Type                                                  |
 | ------------- | ----------------------------------------------------- |
 | **`options`** | <code><a href="#styleoptions">StyleOptions</a></code> |
-
-**Returns:** <code>any</code>
 
 --------------------
 
@@ -107,10 +99,10 @@ setStatusBarStyle(options: StyleOptions) => any
 ### isStatusBarVisible()
 
 ```typescript
-isStatusBarVisible() => any
+isStatusBarVisible() => Promise<boolean>
 ```
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;boolean&gt;</code>
 
 --------------------
 
@@ -118,10 +110,8 @@ isStatusBarVisible() => any
 ### showNavigationBar()
 
 ```typescript
-showNavigationBar() => any
+showNavigationBar() => Promise<void>
 ```
-
-**Returns:** <code>any</code>
 
 --------------------
 
@@ -129,10 +119,8 @@ showNavigationBar() => any
 ### hideNavigationBar()
 
 ```typescript
-hideNavigationBar() => any
+hideNavigationBar() => Promise<void>
 ```
-
-**Returns:** <code>any</code>
 
 --------------------
 
@@ -140,14 +128,12 @@ hideNavigationBar() => any
 ### setNavigationBarColor(...)
 
 ```typescript
-setNavigationBarColor(options: ColorOptions) => any
+setNavigationBarColor(options: ColorOptions) => Promise<void>
 ```
 
 | Param         | Type                                                  |
 | ------------- | ----------------------------------------------------- |
 | **`options`** | <code><a href="#coloroptions">ColorOptions</a></code> |
-
-**Returns:** <code>any</code>
 
 --------------------
 
@@ -155,14 +141,12 @@ setNavigationBarColor(options: ColorOptions) => any
 ### setNavigationBarStyle(...)
 
 ```typescript
-setNavigationBarStyle(options: StyleOptions) => any
+setNavigationBarStyle(options: StyleOptions) => Promise<void>
 ```
 
 | Param         | Type                                                  |
 | ------------- | ----------------------------------------------------- |
 | **`options`** | <code><a href="#styleoptions">StyleOptions</a></code> |
-
-**Returns:** <code>any</code>
 
 --------------------
 
@@ -170,10 +154,10 @@ setNavigationBarStyle(options: StyleOptions) => any
 ### isNavigationBarVisible()
 
 ```typescript
-isNavigationBarVisible() => any
+isNavigationBarVisible() => Promise<boolean>
 ```
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;boolean&gt;</code>
 
 --------------------
 
@@ -181,10 +165,8 @@ isNavigationBarVisible() => any
 ### showKeyboard()
 
 ```typescript
-showKeyboard() => any
+showKeyboard() => Promise<void>
 ```
-
-**Returns:** <code>any</code>
 
 --------------------
 
@@ -192,10 +174,8 @@ showKeyboard() => any
 ### hideKeyboard()
 
 ```typescript
-hideKeyboard() => any
+hideKeyboard() => Promise<void>
 ```
-
-**Returns:** <code>any</code>
 
 --------------------
 
@@ -203,10 +183,10 @@ hideKeyboard() => any
 ### isKeyboardVisible()
 
 ```typescript
-isKeyboardVisible() => any
+isKeyboardVisible() => Promise<boolean>
 ```
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;boolean&gt;</code>
 
 --------------------
 
@@ -214,10 +194,10 @@ isKeyboardVisible() => any
 ### getKeyboardInsets()
 
 ```typescript
-getKeyboardInsets() => any
+getKeyboardInsets() => Promise<Rect>
 ```
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;<a href="#rect">Rect</a>&gt;</code>
 
 --------------------
 
@@ -225,14 +205,12 @@ getKeyboardInsets() => any
 ### toggleAccessoryBar(...)
 
 ```typescript
-toggleAccessoryBar(options: ToggleOptions) => any
+toggleAccessoryBar(options: ToggleOptions) => Promise<void>
 ```
 
 | Param         | Type                                                    |
 | ------------- | ------------------------------------------------------- |
 | **`options`** | <code><a href="#toggleoptions">ToggleOptions</a></code> |
-
-**Returns:** <code>any</code>
 
 --------------------
 
@@ -240,62 +218,60 @@ toggleAccessoryBar(options: ToggleOptions) => any
 ### toggleScroll(...)
 
 ```typescript
-toggleScroll(options: ToggleOptions) => any
+toggleScroll(options: ToggleOptions) => Promise<void>
 ```
 
 | Param         | Type                                                    |
 | ------------- | ------------------------------------------------------- |
 | **`options`** | <code><a href="#toggleoptions">ToggleOptions</a></code> |
 
-**Returns:** <code>any</code>
-
 --------------------
 
 
-### addListener(...)
+### addListener('insets', ...)
 
 ```typescript
-addListener(eventName: 'insets', listener: (event: InsetsEvent) => void) => any
+addListener(eventName: 'insets', listener: (event: InsetsEvent) => void) => Promise<PluginListenerHandle>
 ```
 
 | Param           | Type                                                                    |
 | --------------- | ----------------------------------------------------------------------- |
-| **`eventName`** | <code>"insets"</code>                                                   |
+| **`eventName`** | <code>'insets'</code>                                                   |
 | **`listener`**  | <code>(event: <a href="#insetsevent">InsetsEvent</a>) =&gt; void</code> |
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 --------------------
 
 
-### addListener(...)
+### addListener('keyboardshow', ...)
 
 ```typescript
-addListener(eventName: 'keyboardshow', listener: (insets: Rect) => void) => any
+addListener(eventName: 'keyboardshow', listener: (insets: Rect) => void) => Promise<PluginListenerHandle>
 ```
 
 | Param           | Type                                                       |
 | --------------- | ---------------------------------------------------------- |
-| **`eventName`** | <code>"keyboardshow"</code>                                |
+| **`eventName`** | <code>'keyboardshow'</code>                                |
 | **`listener`**  | <code>(insets: <a href="#rect">Rect</a>) =&gt; void</code> |
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 --------------------
 
 
-### addListener(...)
+### addListener('keyboardhide', ...)
 
 ```typescript
-addListener(eventName: 'keyboardhide', listener: () => void) => any
+addListener(eventName: 'keyboardhide', listener: () => void) => Promise<PluginListenerHandle>
 ```
 
 | Param           | Type                        |
 | --------------- | --------------------------- |
-| **`eventName`** | <code>"keyboardhide"</code> |
+| **`eventName`** | <code>'keyboardhide'</code> |
 | **`listener`**  | <code>() =&gt; void</code>  |
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 --------------------
 
@@ -332,6 +308,13 @@ addListener(eventName: 'keyboardhide', listener: () => void) => any
 | Prop          | Type                 |
 | ------------- | -------------------- |
 | **`enabled`** | <code>boolean</code> |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 #### InsetsEvent

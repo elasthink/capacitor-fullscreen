@@ -1,3 +1,5 @@
+import type { PluginListenerHandle } from "@capacitor/core";
+
 export enum Style {
   Dark = 'dark',
   Light = 'light',
@@ -88,10 +90,10 @@ export interface InsetsPlugin extends Plugin {
   /* EVENTS
    * ================================================================================================================ */
 
-  addListener(eventName: 'insets', listener: (event: InsetsEvent) => void): Promise<void>
+  addListener(eventName: 'insets', listener: (event: InsetsEvent) => void): Promise<PluginListenerHandle>
 
-  addListener(eventName: 'keyboardshow', listener: (insets: Rect) => void): Promise<void>
+  addListener(eventName: 'keyboardshow', listener: (insets: Rect) => void): Promise<PluginListenerHandle>
 
-  addListener(eventName: 'keyboardhide', listener: () => void): Promise<void>
+  addListener(eventName: 'keyboardhide', listener: () => void): Promise<PluginListenerHandle>
 
 }
